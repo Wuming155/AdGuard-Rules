@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10131
-# Last Update: 2026-07-26 18:09:13
+# Total Rules: 10099
+# Last Update: 2026-07-26 18:35:38
 #
 #
 
@@ -2645,7 +2645,6 @@
 0.0.0.0 ad.dumedia.ru
 0.0.0.0 ad.egou.com
 0.0.0.0 ad.flurry.com
-0.0.0.0 ad.gamebox.360.cn
 0.0.0.0 ad.googleanalysis.mobi
 0.0.0.0 ad.holmesmind.com
 0.0.0.0 ad.hot-mob.com
@@ -3232,7 +3231,6 @@
 0.0.0.0 api.shuzilm.cn
 0.0.0.0 api.sms.jpush.cn
 0.0.0.0 api.snmi.cn
-0.0.0.0 api.so.lianmeng.360.cn
 0.0.0.0 api.srv.jpush.cn
 0.0.0.0 api.ssp.admobile.top
 0.0.0.0 api.ssp.sigmob.cn
@@ -3465,7 +3463,6 @@
 0.0.0.0 authentication.taboola.com
 0.0.0.0 author.bloggerads.net
 0.0.0.0 autobild.adsame.com
-0.0.0.0 autoupdate.tantanapp.com
 0.0.0.0 autozone.actonservice.com
 0.0.0.0 av1.xdrig.com
 0.0.0.0 avai.actonservice.com
@@ -3554,7 +3551,6 @@
 0.0.0.0 bc.weixin.qq.com
 0.0.0.0 bcc-ltd.actonservice.com
 0.0.0.0 bce-track-dsp.adwangmai.com
-0.0.0.0 bce.baidu.com
 0.0.0.0 bce.bj.ad.track.66mobi.com
 0.0.0.0 bcode.zhantai.com
 0.0.0.0 bcp.crwdcntrl.net
@@ -4049,7 +4045,6 @@
 0.0.0.0 clickatell.actonservice.com
 0.0.0.0 clickc.admaster.com.cn
 0.0.0.0 clickjs.cnzz.com
-0.0.0.0 client-tracking.tantanapp.com
 0.0.0.0 client-tracking.tantanapp.com.ctc
 0.0.0.0 client.cnzz.com
 0.0.0.0 client.mail.163.com
@@ -4118,7 +4113,6 @@
 0.0.0.0 cm.gtags.net
 0.0.0.0 cm.he2d.com
 0.0.0.0 cm.ipinyou.com
-0.0.0.0 cm.lianmeng.360.cn
 0.0.0.0 cm.masky.biddingx.com
 0.0.0.0 cm.mct01.com
 0.0.0.0 cm.mediav.com
@@ -4156,7 +4150,6 @@
 0.0.0.0 cms.gtags.net
 0.0.0.0 cms.quantserve.com
 0.0.0.0 cms.v5.juzi.cn
-0.0.0.0 cmts.iqiyi.com
 0.0.0.0 cmv6-10-81.getui.com
 0.0.0.0 cmyd-10-11.getui.com
 0.0.0.0 cmyd-10-124.getui.com
@@ -4475,7 +4468,6 @@
 0.0.0.0 dco-jads-727222375.us-west-2.elb.amazonaws.com
 0.0.0.0 dcw.hdswgc.com
 0.0.0.0 dd.70yst.com
-0.0.0.0 dd.browser.360.cn
 0.0.0.0 dd.iaskgo.com
 0.0.0.0 dd.toponad.com
 0.0.0.0 dd.wx16999.com
@@ -4505,7 +4497,6 @@
 0.0.0.0 dev.getui.com
 0.0.0.0 dev.imp.nextmedia.com
 0.0.0.0 dev.ios.mob.com
-0.0.0.0 dev.tg.wan.360.cn
 0.0.0.0 dev.umeng.com
 0.0.0.0 devc.flysleep.cn
 0.0.0.0 devc.zztfly.com
@@ -4547,7 +4538,6 @@
 0.0.0.0 dis.criteo.com
 0.0.0.0 dis.us.criteo.com
 0.0.0.0 discoverorg.actonservice.com
-0.0.0.0 disney.my.sentry.io
 0.0.0.0 dispenser-rtb.sape.ru
 0.0.0.0 display.ad.daum.net
 0.0.0.0 display.wting.info
@@ -4836,7 +4826,6 @@
 0.0.0.0 exchange.ipdx.cn.miaozhen.com
 0.0.0.0 exp.qumi.com
 0.0.0.0 experts.actonservice.com
-0.0.0.0 exquisite.shouji.360.cn
 0.0.0.0 ext.mediav.com
 0.0.0.0 extendyourreach.actonservice.com
 0.0.0.0 f-cashloan.snssdk.com
@@ -4990,7 +4979,6 @@
 0.0.0.0 g.miaozhen.com
 0.0.0.0 g.qucaigg.com
 0.0.0.0 g.rs.yoyi.com.cn
-0.0.0.0 g.sdk.look.360.cn
 0.0.0.0 g.usingde.com
 0.0.0.0 g.wan.2345.com
 0.0.0.0 g.wan.douyu.com
@@ -5069,7 +5057,6 @@
 0.0.0.0 ggx02.miguvideo.com
 0.0.0.0 ggx10.miguvideo.com
 0.0.0.0 gi.gepush.com
-0.0.0.0 gia.jd.com
 0.0.0.0 gif.lu.sogoucdn.com
 0.0.0.0 gini.snssdk.com
 0.0.0.0 gj.applog.uc.cn
@@ -5277,7 +5264,6 @@
 0.0.0.0 httpdns.music.ntes53.netease.com
 0.0.0.0 httpdns.ng.imgo.tv
 0.0.0.0 httpdns.push.heytapmobi.com
-0.0.0.0 httpdns.tantanapp.com
 0.0.0.0 httpdns.yunxinfw.com
 0.0.0.0 httpdns.zhihu.com
 0.0.0.0 httpkafka.unityads.unity3d.com
@@ -5849,7 +5835,6 @@
 0.0.0.0 lf26-sf-be-pack-sign.pglstatp-toutiao.com
 0.0.0.0 lf3-cdn-tos.bytegecko.com
 0.0.0.0 lf3-common-ckv-tos.pstatp.com
-0.0.0.0 lf3-data.volccdn.com
 0.0.0.0 lf3-orange.byteorge.com
 0.0.0.0 lf3-sf-be-pack-sign.pglstatp-toutiao.com
 0.0.0.0 lf3-ttcdn-tos.pstatp.com
@@ -6449,7 +6434,6 @@
 0.0.0.0 ns8.adk2x.com
 0.0.0.0 nsfocus.actonservice.com
 0.0.0.0 nspt.bdstatic.com
-0.0.0.0 nstool.netease.com
 0.0.0.0 nuvi.actonservice.com
 0.0.0.0 nv.souid.com
 0.0.0.0 nym1-ib.adnxs.com
@@ -6460,8 +6444,6 @@
 0.0.0.0 o.minisplat.cn
 0.0.0.0 o2o-ad-clicking.alibaba.com
 0.0.0.0 o2o-ad-dev.oss-cn-shanghai.aliyuncs.com
-0.0.0.0 o33249.ingest.sentry.io
-0.0.0.0 o4504926511693824.ingest.sentry.io
 0.0.0.0 oa.getui.com
 0.0.0.0 oasisadvantage.actonservice.com
 0.0.0.0 oask.xulizui6.com
@@ -7037,7 +7019,6 @@
 0.0.0.0 rd.ane.yahoo.co.jp
 0.0.0.0 rd.da.netease.com
 0.0.0.0 rd.e.sogou.com
-0.0.0.0 rd.wan.360.cn
 0.0.0.0 reachmax-cm.admaster.com.cn
 0.0.0.0 reader-res.mzres.com
 0.0.0.0 reading-hl.snssdk.com
@@ -7212,7 +7193,6 @@
 0.0.0.0 s.jpush.cn
 0.0.0.0 s.khgj.cn
 0.0.0.0 s.l.fastapi.net
-0.0.0.0 s.lianmeng.360.cn
 0.0.0.0 s.mic.mob.com
 0.0.0.0 s.oadz.com
 0.0.0.0 s.okmgy.cn
@@ -7242,7 +7222,6 @@
 0.0.0.0 s1.cnzz.com
 0.0.0.0 s1.irs03.com
 0.0.0.0 s1.kuaibaopay.com
-0.0.0.0 s1.stat.lianmeng.360.cn
 0.0.0.0 s1.tansuotv.com
 0.0.0.0 s10.cnzz.com
 0.0.0.0 s10.histats.com
@@ -7506,7 +7485,6 @@
 0.0.0.0 sdk.open.talk.getui.net
 0.0.0.0 sdk.open.talk.igexin.com
 0.0.0.0 sdk.push.mob.com
-0.0.0.0 sdk.s.360.cn
 0.0.0.0 sdk.shuhonggz.com
 0.0.0.0 sdk.ssp.admobile.top
 0.0.0.0 sdk.tianmu.mobi
@@ -7846,10 +7824,8 @@
 0.0.0.0 stat.gamedl.qq.com
 0.0.0.0 stat.googleanalysis.mobi
 0.0.0.0 stat.gw.youmi.net
-0.0.0.0 stat.lianmeng.360.cn
 0.0.0.0 stat.mobgi.com
 0.0.0.0 stat.rscc3.cc
-0.0.0.0 stat.sd.360.cn
 0.0.0.0 stat.shuhonggz.com
 0.0.0.0 stat.titan.imgo.tv
 0.0.0.0 stat.xdplt.com
@@ -7905,7 +7881,6 @@
 0.0.0.0 static1.keepcdn.com
 0.0.0.0 staticadm.leju.sina.com.cn
 0.0.0.0 statics.adanxing.com
-0.0.0.0 staticsns.cdn.bcebos.com
 0.0.0.0 statres.quickapp.cn
 0.0.0.0 stats-ipv6.jpush.cn
 0.0.0.0 stats.appsflyer.com
@@ -7949,7 +7924,6 @@
 0.0.0.0 stuff.cdn.biddingx.com
 0.0.0.0 su.addthis.com
 0.0.0.0 subo.logger.baofeng.com
-0.0.0.0 sug.browser.miui.com
 0.0.0.0 sugabyte.actonservice.com
 0.0.0.0 suo.lp.mydas.mobi
 0.0.0.0 superiorgroup.actonservice.com
@@ -8051,11 +8025,8 @@
 0.0.0.0 t1.wshufa.com
 0.0.0.0 t2.jzkapp.com
 0.0.0.0 t2.wshufa.com
-0.0.0.0 t4.a.market.xiaomi.com
 0.0.0.0 t4.agrantsem.com
-0.0.0.0 t5.a.market.xiaomi.com
 0.0.0.0 t5.taboola.com
-0.0.0.0 t6.a.market.xiaomi.com
 0.0.0.0 tab.volces.com
 0.0.0.0 tablesafe.actonservice.com
 0.0.0.0 tag.agrvt.com
@@ -8497,7 +8468,6 @@
 0.0.0.0 ts.tradetracker.net
 0.0.0.0 tsis-ipv6.jpush.cn
 0.0.0.0 tsis.jpush.cn
-0.0.0.0 tt.browser.360.cn
 0.0.0.0 tt.toponad.com
 0.0.0.0 tt.twzui6.com
 0.0.0.0 ttcu-union.actonservice.com
@@ -8971,7 +8941,6 @@
 0.0.0.0 wkmp2.tingyun.com
 0.0.0.0 wkrt.tingyun.com
 0.0.0.0 wl.51taifu.com
-0.0.0.0 wl.jd.com
 0.0.0.0 wlneteller.adsrv.eacdn.com
 0.0.0.0 wm.lrswl.com
 0.0.0.0 wm.makeding.com
@@ -10044,7 +10013,6 @@
 0.0.0.0 ykugc.cp31.ott.cibntv.net
 0.0.0.0 ym.adnxs.com
 0.0.0.0 ymjs.adutp.com
-0.0.0.0 ynuf.aliapp.org
 0.0.0.0 yoo.yiiyoo.net
 0.0.0.0 youku-dtv.m.cn.miaozhen.com
 0.0.0.0 yourbrandlive.actonservice.com

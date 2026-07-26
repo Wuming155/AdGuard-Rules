@@ -10,10 +10,10 @@ AdGuard 广告过滤规则合集，每日自动更新。
 
 | 规则文件 | 说明 | 规则数量 | 下载链接 |
 | :--- | :--- | :--- | :--- |
-| hosts_rules_dedup.txt | 去重版，去掉 AdGuard 已覆盖域名，可搭配 adguard_rules.txt 使用 | 10131 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules_dedup.txt) |
-| reject_domains.txt | 域名拒绝列表（纯域名格式） | 922040 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/reject_domains.txt) |
-| adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 912350 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/adguard_rules.txt) |
-| hosts_rules.txt | Hosts 格式，适用于 bindhosts 等 Magisk 模块 | 831012 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules.txt) |
+| hosts_rules_dedup.txt | 去重版，去掉 AdGuard 已覆盖域名，可搭配 adguard_rules.txt 使用 | 10099 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules_dedup.txt) |
+| reject_domains.txt | 域名拒绝列表（纯域名格式） | 921905 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/reject_domains.txt) |
+| adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 912247 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/adguard_rules.txt) |
+| hosts_rules.txt | Hosts 格式，适用于 bindhosts 等 Magisk 模块 | 830891 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules.txt) |
 
-⏰ 最后更新: 2026-07-26 18:09:15
+⏰ 最后更新: 2026-07-26 18:35:39
 
