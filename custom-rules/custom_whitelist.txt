@@ -1,0 +1,21 @@
+@@||api.trae.cn/cloudide/api/$domain=trae.cn
+#放行vivo系统升级
+@@||sysupgrade.vivo.com.cn^
+#解决喜马拉雅无法播放（注意：域名 lllocation 为双 l 开头，非 typo）
+@@lllocation.ximalaya.com
+#解决应用商店更新
+@@||update.appstore.vivo.com.cn^$app=com.bbk.appstore
+#解决小V电话助手无法使用摘要功能
+@@||isecure.vivo.com.cn^$app=com.iqoo.secure
+#放行outlook邮箱
+@@||outlook.office.com^
+#放行哔哩哔哩视频API
+@@||api.live.bilibili.com^
+# 放行QQ长连接（保证即时通讯推送）
+@@||szlong.weixin.qq.com^
+
+# 放行小米系统推送通道（保证系统级推送唤醒）
+@@||resolver.msg.xiaomi.net^
+@@||resolver.msg.global.xiaomi.net^
+@@||resolver.mi.xiaomi.com^
+@@||resolver.gslb.mi-idc.com^
