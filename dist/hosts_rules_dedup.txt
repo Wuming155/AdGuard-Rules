@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10132
-# Last Update: 2026-07-26 18:04:05
+# Total Rules: 10131
+# Last Update: 2026-07-26 18:09:13
 #
 #
 
@@ -4168,7 +4168,6 @@
 0.0.0.0 cn-job-inner.tradplusad.com
 0.0.0.0 cn-tk.anythinktech.com
 0.0.0.0 cn.api.push.le.com
-0.0.0.0 cn.app.chat.xiaomi.net
 0.0.0.0 cn.miaozhen.com
 0.0.0.0 cn.oss.vlion.cn
 0.0.0.0 cn.pub.vpon.com
