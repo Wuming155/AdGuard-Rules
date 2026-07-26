@@ -1,7 +1,7 @@
 ! Title: Whitelist
-! Homepage: https://github.com/Wuming155/China-AdGuard-Rules
-! Total Rules: 60
-! Last Update: 2026-07-26 16:58:14
+! Homepage: https://github.com/Wuming155/AdGuard-Rules
+! Total Rules: 66
+! Last Update: 2026-07-26 18:04:05
 !
 !
 
@@ -20,6 +20,7 @@
 @@||analysis.windows.net^
 @@||api.huangye.miui.com^
 @@||api.live.bilibili.com^
+@@||api.micloud.xiaomi.net^
 @@||api.trae.cn/cloudide/api/$domain=trae.cn
 @@||app.adjust.com^
 @@||app.powerbi.com^
@@ -27,12 +28,15 @@
 @@||baozhang.baidu.com^
 @@||center-h5api.m.taobao.com^
 @@||chart-embed.service.newrelic.com^
+@@||cnbj1.fds.api.xiaomi.com^
 @@||counter-strike.net^
 @@||dxcloud.episerver.net^
 @@||edge-enterprise.activity.windows.com^
 @@||edge.activity.windows.com^
 @@||ftp.bmp.ovh^
 @@||future.biz.weibo.com^
+@@||galleryapi.micloud.xiaomi.net^
+@@||i.xiaomi.com^
 @@||insideruser.microsoft.com^
 @@||isecure.vivo.com.cn^$app=com.iqoo.secure
 @@||log.mmstat.com^
@@ -53,6 +57,7 @@
 @@||stat.jseea.cn^
 @@||stats.gov.cn^
 @@||stats.uptimerobot.com^
+@@||statusapi.micloud.xiaomi.net^
 @@||storage.live.com^
 @@||sysupgrade.vivo.com.cn^
 @@||szlong.weixin.qq.com^
@@ -64,4 +69,5 @@
 @@||uland.taobao.com^
 @@||update.appstore.vivo.com.cn^$app=com.bbk.appstore
 @@||widget.intercom.io^
+@@||wtradv.market.xiaomi.com^
 @@||www.msftconnecttest.com^
