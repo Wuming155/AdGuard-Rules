@@ -1,45 +1,216 @@
-@@||api.trae.cn
-#放行vivo系统升级
-@@||sysupgrade.vivo.com.cn^
-#解决喜马拉雅无法播放（注意：域名 lllocation 为双 l 开头，非 typo）
-@@lllocation.ximalaya.com
-#解决应用商店更新
-@@||update.appstore.vivo.com.cn^
-#解决小V电话助手无法使用摘要功能
-@@||isecure.vivo.com.cn^
-#放行outlook邮箱
-@@||outlook.office.com^
-#放行哔哩哔哩视频API
-@@||api.live.bilibili.com^
-# 放行QQ长连接（保证即时通讯推送）
-@@||szlong.weixin.qq.com^
+# ============================================================
+# 📱 手机系统与厂商基础服务
+# ============================================================
 
-# 放行小米系统推送通道（保证系统级推送唤醒）
-@@||resolver.msg.xiaomi.net^
-@@||resolver.msg.global.xiaomi.net^
-@@||resolver.mi.xiaomi.com^
-@@||resolver.gslb.mi-idc.com^
-# 放行小米云服务相关域名
-@@||statusapi.micloud.xiaomi.net^
-@@||galleryapi.micloud.xiaomi.net^
-@@||api.micloud.xiaomi.net^
-# 放行小米广告/市场相关域名
-@@||wtradv.market.xiaomi.com^
-# 放行小米其他服务
-@@||i.xiaomi.com^
-@@||cnbj1.fds.api.xiaomi.com^
-# 放行小米其他服务
-@@||srv.sec.miui.com^
-@@||testit.miui.com^
-@@||cn.app.chat.xiaomi.net^
-# 小米主题/市场相关（带important标记）
-@@||thm.market.xiaomi.com^
-@@||t2.a.market.xiaomi.com^
-@@||t5.market.xiaomi.com^
-@@||t2.market.xiaomi.com^
-@@||t3.a.market.xiaomi.com^
-@@||t4.market.xiaomi.com^
-@@||t3.market.xiaomi.com^
-@@||t1.market.xiaomi.com^
-# 放行 myhkw.cn
-@@||myhkw.cn^
+# --- Vivo / 小V助手 ---
+# Vivo 系统升级检测
+sysupgrade.vivo.com.cn
+# 应用商店更新服务
+update.appstore.vivo.com.cn
+# 小V电话助手 - 摘要功能
+isecure.vivo.com.cn
+
+# --- 小米 / MIUI / HyperOS ---
+# 小米推送通道（系统级推送唤醒）
+resolver.msg.xiaomi.net
+resolver.msg.global.xiaomi.net
+resolver.mi.xiaomi.com
+resolver.gslb.mi-idc.com
+# 小米云服务（相册/状态/API）
+statusapi.micloud.xiaomi.net
+galleryapi.micloud.xiaomi.net
+api.micloud.xiaomi.net
+a0.app.xiaomi.com
+thm.market.xiaomi.com
+t1.market.xiaomi.com
+t2.market.xiaomi.com
+t2.a.market.xiaomi.com
+t3.market.xiaomi.com
+t3.a.market.xiaomi.com
+t4.market.xiaomi.com
+t5.market.xiaomi.com
+a.market.xiaomi.com
+# 小米浏览器服务
+browser.miui.com
+api.browser.miui.com
+# 小米安全与通信服务
+api.sec.miui.com
+srv.sec.miui.com
+testit.miui.com
+api.comm.miui.com
+api.developer.xiaomi.com
+api.vip.miui.com
+# 小米其他服务
+i.xiaomi.com
+cnbj1.fds.api.xiaomi.com
+cn.app.chat.xiaomi.net
+app.chat.xiaomi.net
+
+# --- OPPO / ColorOS / HeyTap ---
+# OPPO 应用商店及推送通道
+apps.coloros.com
+conn1.coloros.com
+conn2.coloros.com
+conn3.coloros.com
+conn4.coloros.com
+conn5.coloros.com
+client-uc.heytapmobi.com
+# OPPO 天气服务
+i6.weather.oppomobile.com
+
+# ============================================================
+# 💬 社交、即时通讯与账号登录
+# ============================================================
+
+# --- 微软邮箱 ---
+# Outlook / Office 365 邮箱服务
+outlook.office.com
+
+# --- 腾讯 / 微信 / QQ ---
+# 微信长连接（即时通讯推送保障）
+szlong.weixin.qq.com
+# 微信图片/素材 CDN
+wximg.wxs.qq.com
+# QQ 连接 & 登录服务
+cgi.connect.qq.com
+c.pc.qq.com
+q2.qlogo.cn
+# 腾讯移动 SDK（MSDK）
+msdk.qq.com
+ssl.msdk.qq.com
+ap6.ssl.msdk.qq.com
+
+# --- 安全验证与风险控制 ---
+# 网易易盾 - 验证码/风控
+ac.dun.163.com
+# 数美科技 - 风控 SDK
+castatic.fengkongcloud.com
+
+# --- 其他社交与社区 ---
+tantanapp.com
+vk.com
+
+# ============================================================
+# 🎬 视频、音乐与娱乐
+# ============================================================
+
+# --- B站 / 腾讯视频 / 爱奇艺 / 喜马拉雅 / 网易云 ---
+# B站直播 API
+api.live.bilibili.com
+# B站弹幕服务
+chat.bilibili.com
+# B站游戏
+biligame.com
+# 喜马拉雅音频播放（注意：lllocation 为双 l 开头）
+lllocation.ximalaya.com
+# 腾讯视频
+vv.video.qq.com
+vmat.gtimg.com
+# 爱奇艺弹幕服务
+cmts.iqiyi.com
+
+# ============================================================
+# 🛒 电商、金融与支付
+# ============================================================
+
+# --- 淘宝 / 阿里 / 搜狗 ---
+# 淘宝移动网络调度
+amdc.m.taobao.com
+# 阿里 CDN 应用下载
+appdownload.alicdn.com
+
+# --- 京东 / 唯品会 / 一号店 ---
+# 京东服务（物流/广告/统计）
+gia.jd.com
+wl.jd.com
+ccc-x.jd.com
+knicks.jd.com
+
+
+# ============================================================
+# 🤖 人工智能（AI）服务
+# ============================================================
+
+# Trae AI 编程助手
+api.trae.cn
+# Chat Z AI
+chat.z.ai
+# Sider AI 浏览器助手
+sider.ai
+
+# ============================================================
+# ☁️ 云存储、CDN 与开发者服务
+# ============================================================
+
+# --- 华为云 OBS ---
+obs.cn-east-2.myhuaweicloud.com
+obs.cn-east-3.myhuaweicloud.com
+obs.cn-north-1.myhuaweicloud.com
+obs.cn-north-2.myhuaweicloud.com
+obs.cn-north-4.myhuaweicloud.com
+obs.cn-south-1.myhuaweicloud.com
+file-contents-abc.obs.cn-north-4.myhuaweicloud.com
+
+# --- 百度云 / 百度 CDN ---
+bce.baidu.com
+ms.bdstatic.com
+staticsns.cdn.bcebos.com
+
+# --- myhkw.cn 云服务 ---
+myhkw.cn
+
+# --- CDN、网络节点与诊断工具 ---
+# 字节跳动 CDN
+lf6-cdn-tos.bytecdntp.com
+lf3-data.volccdn.com
+tnc3-alisc1.bytedance.com
+# jsDelivr CDN
+testingcf.jsdelivr.net
+testingcf.jsdelivr.net.cdn.cloudflare.net
+# Allawntech 连接服务
+conn-service-cn-03.allawntech.com
+conn-service-cn-04.allawntech.com
+conn-service-cn-05.allawntech.com
+# SakuraFrp 内网穿透
+natfrp.cloud
+# 网易网络诊断
+nstool.netease.com
+# Sentry 错误日志收集
+sentry.io
+
+# ============================================================
+# 🌐 常用网站与应用
+# ============================================================
+
+# 123云盘
+statics.123pan.com
+
+
+
+# --- 门户、资讯与生活服务 ---
+# 豆瓣
+erebor.douban.com
+# 新浪微博 CDN
+simg.sinajs.cn
+# 小红书
+edith.xiaohongshu.com
+# 兑吧（积分兑换）
+duiba.com.cn
+dui88.com
+# 同程旅游
+17u.cn
+# 联通营业厅
+nisportal.10010.com
+
+
+# --- 开发者工具与在线服务 ---
+# Online Metrix 反欺诈
+online-metrix.net
+# 阿里云推送
+ynuf.aliapp.org
+
+# --- 其他网站与工具 ---
+# 360.cn 安全服务
+360.cn
+www.360.cn
+jiagu.360.cn

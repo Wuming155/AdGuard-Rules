@@ -1,6 +1,7 @@
 """规则获取模块 — 负责本地规则文件读取与远程规则订阅拉取"""
 
 import logging
+import re
 from pathlib import Path
 
 import requests
@@ -28,6 +29,11 @@ class RuleFetcher:
     # 远程下载约束
     _MAX_RESPONSE_SIZE = 50 * 1024 * 1024  # 50 MB
     _CHUNK_SIZE = 8192
+
+    # 匹配合法域名（与 RuleResolver 保持一致）
+    _DOMAIN_PATTERN = re.compile(
+        r'^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$'
+    )
 
     def __init__(self,
                  sources_reader: SourcesReader,
@@ -71,8 +77,16 @@ class RuleFetcher:
 
             try:
                 skipped = 0
+                is_whitelist_file = (f.name == 'custom_whitelist.txt')
                 with open(f, 'r', encoding='utf-8') as fh:
                     for line in fh:
+                        stripped = line.strip()
+
+                        # 如果是白名单文件的纯域名行，自动包装为 @@||domain^ 格式
+                        if is_whitelist_file and stripped and not stripped.startswith(('#', '!', '@', '/')):
+                            if self._DOMAIN_PATTERN.match(stripped):
+                                line = f'@@||{stripped}^'
+
                         rtype, rule = self._resolver.resolve(line)
                         if rtype:
                             self._store.add_rule(rtype, rule)
