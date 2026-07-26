@@ -1,12 +1,12 @@
-@@||api.trae.cn/cloudide/api/$domain=trae.cn
+@@||api.trae.cn
 #放行vivo系统升级
 @@||sysupgrade.vivo.com.cn^
 #解决喜马拉雅无法播放（注意：域名 lllocation 为双 l 开头，非 typo）
 @@lllocation.ximalaya.com
 #解决应用商店更新
-@@||update.appstore.vivo.com.cn^$app=com.bbk.appstore
+@@||update.appstore.vivo.com.cn^
 #解决小V电话助手无法使用摘要功能
-@@||isecure.vivo.com.cn^$app=com.iqoo.secure
+@@||isecure.vivo.com.cn^
 #放行outlook邮箱
 @@||outlook.office.com^
 #放行哔哩哔哩视频API
@@ -28,3 +28,18 @@
 # 放行小米其他服务
 @@||i.xiaomi.com^
 @@||cnbj1.fds.api.xiaomi.com^
+# 放行小米其他服务
+@@||srv.sec.miui.com^
+@@||testit.miui.com^
+@@||cn.app.chat.xiaomi.net^
+# 小米主题/市场相关（带important标记）
+@@||thm.market.xiaomi.com^
+@@||t2.a.market.xiaomi.com^
+@@||t5.market.xiaomi.com^
+@@||t2.market.xiaomi.com^
+@@||t3.a.market.xiaomi.com^
+@@||t4.market.xiaomi.com^
+@@||t3.market.xiaomi.com^
+@@||t1.market.xiaomi.com^
+# 放行 myhkw.cn
+@@||myhkw.cn^
