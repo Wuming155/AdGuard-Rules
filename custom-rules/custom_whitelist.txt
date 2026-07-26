@@ -19,3 +19,12 @@
 @@||resolver.msg.global.xiaomi.net^
 @@||resolver.mi.xiaomi.com^
 @@||resolver.gslb.mi-idc.com^
+# 放行小米云服务相关域名
+@@||statusapi.micloud.xiaomi.net^
+@@||galleryapi.micloud.xiaomi.net^
+@@||api.micloud.xiaomi.net^
+# 放行小米广告/市场相关域名
+@@||wtradv.market.xiaomi.com^
+# 放行小米其他服务
+@@||i.xiaomi.com^
+@@||cnbj1.fds.api.xiaomi.com^
