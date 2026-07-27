@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10099
-# Last Update: 2026-07-26 18:35:38
+# Total Rules: 10097
+# Last Update: 2026-07-27 12:34:42
 #
 #
 
@@ -2766,7 +2766,6 @@
 0.0.0.0 ads.adadapted.com
 0.0.0.0 ads.adaptv.advertising.com
 0.0.0.0 ads.adfox.ru
-0.0.0.0 ads.adfunlink.com
 0.0.0.0 ads.adinall.com
 0.0.0.0 ads.admarvel.com
 0.0.0.0 ads.api.fakeloc.cc
@@ -2894,7 +2893,6 @@
 0.0.0.0 adtag.primetime.adobe.com
 0.0.0.0 adtest.adwo.com
 0.0.0.0 adtrack.e.kuaishou.com
-0.0.0.0 adtracker.adfunlink.com
 0.0.0.0 adttrackingprd.hwwt8.com
 0.0.0.0 adv.aiclk.com
 0.0.0.0 adv.madserving.com
