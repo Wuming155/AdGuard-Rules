@@ -5,11 +5,11 @@ https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ad
 # anti-AD 广告拦截（AdGuard格式）
 https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-adguard.txt
 # hagezi 威胁情报（medium）
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.medium.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt
 # hagezi 成人内容
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/nsfw.txt
 # hagezi 赌博（mini）
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/gambling.mini.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/gambling.txt
 # hagezi 厂商内置追踪器
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/native.amazon.txt
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/native.apple.txt
