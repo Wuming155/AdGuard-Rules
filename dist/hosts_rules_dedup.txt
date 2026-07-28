@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10097
-# Last Update: 2026-07-27 12:34:42
+# Total Rules: 10098
+# Last Update: 2026-07-28 11:58:37
 #
 #
 
@@ -7177,6 +7177,7 @@
 0.0.0.0 s.csbew.com
 0.0.0.0 s.domob.cn
 0.0.0.0 s.dsabva.com
+0.0.0.0 s.dsnucs.com
 0.0.0.0 s.duoroumao.cn
 0.0.0.0 s.effectivemeasure.net
 0.0.0.0 s.emarbox.com
