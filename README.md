@@ -15,5 +15,5 @@ AdGuard 广告过滤规则合集，每日自动更新。
 | adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 2828277 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/adguard_rules.txt) |
 | hosts_rules.txt | Hosts 格式，适用于 bindhosts 等 Magisk 模块 | 259369 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules.txt) |
 
-⏰ 最后更新: 2026-07-28 19:58:48
+⏰ 最后更新: 2026-07-28 20:42:37
 
