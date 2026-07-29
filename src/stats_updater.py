@@ -17,6 +17,9 @@ class StatsUpdater:
         'hosts_rules.txt': 'Hosts 格式，适用于 bindhosts 等 Magisk 模块',
         'adguard_rules.txt': 'AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home',
         'hosts_rules_dedup.txt': '去重版，去掉 AdGuard 已覆盖域名，可搭配 adguard_rules.txt 使用',
+        'hosts_lite.txt': 'Hosts 格式精简版（仅广告过滤）',
+        'adguard_lite.txt': 'AdGuard 格式精简版（仅广告过滤）',
+        'hosts_lite_dedup.txt': '去重版精简 Hosts，可搭配 adguard_lite.txt 使用',
         'reject_domains.txt': '域名拒绝列表（纯域名格式）',
     }
 

@@ -152,8 +152,50 @@ class GenerateDedupHostsStep(PipelineStep):
         self._processor.generate_dedup_hosts_rules()
 
 
+class RemoveWhitelistFromHostsLiteStep(PipelineStep):
+    """步骤 9：从 Lite Hosts 规则中移除白名单域名"""
+
+    def __init__(self, rule_processor: RuleProcessor):
+        self._processor = rule_processor
+
+    @property
+    def name(self) -> str:
+        return "Lite Hosts 白名单清洗"
+
+    def execute(self) -> None:
+        self._processor.remove_whitelist_from_hosts_lite()
+
+
+class RemoveWhitelistFromAdguardLiteStep(PipelineStep):
+    """步骤 10：从 Lite AdGuard 规则中移除白名单域名"""
+
+    def __init__(self, rule_processor: RuleProcessor):
+        self._processor = rule_processor
+
+    @property
+    def name(self) -> str:
+        return "Lite AdGuard 白名单清洗"
+
+    def execute(self) -> None:
+        self._processor.remove_whitelist_from_adguard_lite()
+
+
+class GenerateDedupHostsLiteStep(PipelineStep):
+    """步骤 11：生成去重 Lite Hosts 规则（去掉 Lite AdGuard 已覆盖的域名）"""
+
+    def __init__(self, rule_processor: RuleProcessor):
+        self._processor = rule_processor
+
+    @property
+    def name(self) -> str:
+        return "Lite Hosts 规则去重"
+
+    def execute(self) -> None:
+        self._processor.generate_dedup_hosts_lite_rules()
+
+
 class WriteRulesStep(PipelineStep):
-    """步骤 9：将规则集合写入文件"""
+    """步骤 12：将规则集合写入文件"""
 
     def __init__(self, file_handler: FileHandler, rule_store: RuleStore):
         self._fh = file_handler
@@ -174,6 +216,16 @@ class WriteRulesStep(PipelineStep):
         # 去重版 Hosts 规则单独写出
         dedup = self._store.get_collection(RuleStore.R_TYPE_HOSTS_DEDUP)
         self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_DEDUP, set(dedup), update_time)
+
+        # Lite 版规则写出
+        adguard_lite = self._store.get_collection(RuleStore.R_TYPE_ADGUARD_LITE)
+        self._fh.write_rules_file(RuleStore.R_TYPE_ADGUARD_LITE, set(adguard_lite), update_time)
+
+        hosts_lite = self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE)
+        self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_LITE, set(hosts_lite), update_time)
+
+        hosts_lite_dedup = self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE_DEDUP)
+        self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_LITE_DEDUP, set(hosts_lite_dedup), update_time)
 
         # mihomo 规则单独写出
         self._fh.write_rules_file('reject_domains', self._store.mihomo_rules, update_time)
@@ -230,6 +282,8 @@ class MainExecutor:
         sources_reader = SourcesReader(
             adguard_file=self.config.path.sources_adguard_file,
             host_file=self.config.path.sources_host_file,
+            adguard_lite_file=self.config.path.sources_adguard_lite_file,
+            host_lite_file=self.config.path.sources_host_lite_file,
         )
 
         self.rule_fetcher = rule_fetcher or RuleFetcher(
@@ -270,6 +324,11 @@ class MainExecutor:
 
             # Hosts 去重必须在白名单清洗和 mihomo 生成之后、写入之前
             GenerateDedupHostsStep(self.rule_processor),
+
+            # Lite 版规则处理
+            RemoveWhitelistFromHostsLiteStep(self.rule_processor),
+            RemoveWhitelistFromAdguardLiteStep(self.rule_processor),
+            GenerateDedupHostsLiteStep(self.rule_processor),
 
             WriteRulesStep(self.file_handler, self.rule_store),
             UpdateStatsStep(self.file_handler, self.config),

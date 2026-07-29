@@ -16,6 +16,8 @@ class FileHandler:
         self._sources_reader = SourcesReader(
             adguard_file=cfg.path.sources_adguard_file,
             host_file=cfg.path.sources_host_file,
+            adguard_lite_file=cfg.path.sources_adguard_lite_file,
+            host_lite_file=cfg.path.sources_host_lite_file,
         )
         self._rule_writer = RuleWriter(cfg.path.dist_dir, cfg.github_repo)
         self._stats_updater = StatsUpdater(cfg.path.readme_path, cfg.github_repo)

@@ -15,9 +15,15 @@ class RuleStore:
     R_TYPE_WHITELIST: str = 'whitelist'
     R_TYPE_ADGUARD: str = 'adguard_rules'
     R_TYPE_HOSTS_DEDUP: str = 'hosts_rules_dedup'
+    R_TYPE_HOSTS_LITE: str = 'hosts_lite'
+    R_TYPE_ADGUARD_LITE: str = 'adguard_lite'
+    R_TYPE_HOSTS_LITE_DEDUP: str = 'hosts_lite_dedup'
 
     ALL_RULE_TYPES = frozenset({
         R_TYPE_HOSTS, R_TYPE_WHITELIST, R_TYPE_ADGUARD,
+    })
+    ALL_LITE_RULE_TYPES = frozenset({
+        R_TYPE_HOSTS_LITE, R_TYPE_ADGUARD_LITE, R_TYPE_HOSTS_LITE_DEDUP,
     })
 
     # ------------------------------------------------------------------
@@ -30,6 +36,9 @@ class RuleStore:
             self.R_TYPE_WHITELIST: set(),
             self.R_TYPE_ADGUARD: set(),
             self.R_TYPE_HOSTS_DEDUP: set(),
+            self.R_TYPE_HOSTS_LITE: set(),
+            self.R_TYPE_ADGUARD_LITE: set(),
+            self.R_TYPE_HOSTS_LITE_DEDUP: set(),
         }
 
         # 逆向白名单内部状态（通过封装方法访问）

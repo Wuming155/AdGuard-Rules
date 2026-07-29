@@ -105,24 +105,142 @@ class RuleFetcher:
     # 远程规则
     # ------------------------------------------------------------------
 
+    # ------------------------------------------------------------------
+    # Lite 规则类型映射
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _map_lite_rtype(rtype: str) -> str | None:
+        """将解析出的规则类型映射到 Lite 集合名称。"""
+        mapping = {
+            'hosts_rules': RuleStore.R_TYPE_HOSTS_LITE,
+            'adguard_rules': RuleStore.R_TYPE_ADGUARD_LITE,
+            'whitelist': 'whitelist',  # 白名单全局共享
+        }
+        return mapping.get(rtype)
+
+    # ------------------------------------------------------------------
+    # 远程规则
+    # ------------------------------------------------------------------
+
+    def _process_single_source(self, session: requests.Session, url: str,
+                                is_host_source: bool, is_lite: bool, index: int,
+                                total: int) -> None:
+        """拉取并处理单个远程源的内容。
+
+        :param session:        requests Session
+        :param url:            远程源 URL
+        :param is_host_source: 是否为 Hosts 类型源（影响超时）
+        :param is_lite:        是否为 Lite 精简版源
+        :param index:          当前序号（日志用）
+        :param total:          总数（日志用）
+        """
+        try:
+            logger.info("[%d/%d] 获取: %s%s", index, total, url,
+                        ' [Lite]' if is_lite else '')
+            timeout = 30 if is_host_source else 10
+
+            with session.get(url, timeout=timeout, stream=True) as response:
+                if response.status_code != 200:
+                    logger.warning("获取 %s 失败: HTTP %d", url, response.status_code)
+                    self.fetch_stats['failed'] += 1
+                    return
+
+                # 流式读取 + 大小保护
+                content_chunks: list[bytes] = []
+                total_size = 0
+                exceeded = False
+
+                for chunk in response.iter_content(chunk_size=self._CHUNK_SIZE):
+                    total_size += len(chunk)
+                    if total_size > self._MAX_RESPONSE_SIZE:
+                        logger.warning(
+                            "跳过 %s：响应体过大 (>%dMB)",
+                            url, self._MAX_RESPONSE_SIZE // (1024 * 1024),
+                        )
+                        self.fetch_stats['truncated'] += 1
+                        exceeded = True
+                        break
+                    content_chunks.append(chunk)
+
+                if exceeded:
+                    return
+
+                raw_bytes = b''.join(content_chunks)
+
+                # 解码
+                try:
+                    text = raw_bytes.decode('utf-8')
+                except UnicodeDecodeError:
+                    text = raw_bytes.decode('utf-8', errors='replace')
+                    logger.warning("警告: %s 包含非 UTF-8 字符，已替换处理", url)
+
+                lines = text.splitlines()
+                logger.info("成功获取 %s，共 %d 行", url, len(lines))
+
+                # 逐行解析
+                count = 0
+                error_count = 0
+                for line in lines:
+                    try:
+                        rtype, rule = self._resolver.resolve(line)
+                        if rtype:
+                            count += 1
+                            if is_lite:
+                                target = self._map_lite_rtype(rtype)
+                                if target:
+                                    self._store.add_rule(target, rule)
+                            else:
+                                self._store.add_rule(rtype, rule)
+                    except Exception:
+                        error_count += 1
+
+                self.fetch_stats['success'] += 1
+                logger.info("处理完成，共添加 %d 条规则", count)
+                if error_count:
+                    logger.warning("⚠ %d 行解析失败", error_count)
+
+        except requests.RequestException as e:
+            logger.error("获取 %s 时网络异常: %s", url, e)
+            self.fetch_stats['failed'] += 1
+        except Exception as e:
+            logger.error("获取 %s 时出错: %s", url, e, exc_info=True)
+            self.fetch_stats['failed'] += 1
+
+        logger.info("当前规则数量: %s", self._store.get_status_str())
+
     def read_remote_rules(self) -> None:
-        """读取远程订阅源。"""
+        """读取远程订阅源（含完整版和 Lite 精简版）。"""
         logger.info("读取远程订阅源...")
 
-        # 直接从两个来源文件读取，无需关键词匹配
+        # 读取四个来源文件
         adguard_urls = self._sources_reader.read_adguard_sources()
         host_urls = self._sources_reader.read_host_sources()
+        adguard_lite_urls = self._sources_reader.read_adguard_lite_sources()
+        host_lite_urls = self._sources_reader.read_host_lite_sources()
 
-        total_urls = len(adguard_urls) + len(host_urls)
-        if total_urls == 0:
+        # 构建处理列表：每个元素为 (url, is_host_source, is_lite)
+        processed = (
+            [(url, False, False) for url in adguard_urls]
+            + [(url, True, False) for url in host_urls]
+            + [(url, False, True) for url in adguard_lite_urls]
+            + [(url, True, True) for url in host_lite_urls]
+        )
+
+        total = len(processed)
+        if total == 0:
             logger.warning("没有配置远程订阅源")
             return
 
-        logger.info("共有 %d 个远程规则源（AdGuard: %d, Hosts: %d）",
-                     total_urls, len(adguard_urls), len(host_urls))
+        adguard_full_count = len(adguard_urls)
+        host_full_count = len(host_urls)
+        adguard_lite_count = len(adguard_lite_urls)
+        host_lite_count = len(host_lite_urls)
 
-        # 按类型分组：Hosts 源使用更长超时
-        processed = [(url, False) for url in adguard_urls] + [(url, True) for url in host_urls]
+        logger.info(
+            "共有 %d 个远程规则源（完整版 AdGuard: %d, Hosts: %d | Lite: AdGuard: %d, Hosts: %d）",
+            total, adguard_full_count, host_full_count, adguard_lite_count, host_lite_count,
+        )
 
         # 构建带重试的 Session
         session = requests.Session()
@@ -136,77 +254,9 @@ class RuleFetcher:
         session.mount('https://', adapter)
         session.mount('http://', adapter)
 
-        total = len(processed)
         try:
-            for i, (url, is_host_source) in enumerate(processed, 1):
-                try:
-                    logger.info("[%d/%d] 获取: %s", i, total, url)
-                    timeout = 30 if is_host_source else 10
-
-                    with session.get(url, timeout=timeout, stream=True) as response:
-                        if response.status_code != 200:
-                            logger.warning("获取 %s 失败: HTTP %d", url, response.status_code)
-                            self.fetch_stats['failed'] += 1
-                            continue
-
-                        # 流式读取 + 大小保护
-                        content_chunks: list[bytes] = []
-                        total_size = 0
-                        exceeded = False
-
-                        for chunk in response.iter_content(chunk_size=self._CHUNK_SIZE):
-                            total_size += len(chunk)
-                            if total_size > self._MAX_RESPONSE_SIZE:
-                                logger.warning(
-                                    "跳过 %s：响应体过大 (>%dMB)",
-                                    url, self._MAX_RESPONSE_SIZE // (1024 * 1024),
-                                )
-                                self.fetch_stats['truncated'] += 1
-                                exceeded = True
-                                break
-                            content_chunks.append(chunk)
-
-                        if exceeded:
-                            continue
-
-                        raw_bytes = b''.join(content_chunks)
-
-                        # 解码
-                        try:
-                            text = raw_bytes.decode('utf-8')
-                        except UnicodeDecodeError:
-                            text = raw_bytes.decode('utf-8', errors='replace')
-                            logger.warning("警告: %s 包含非 UTF-8 字符，已替换处理", url)
-
-                        lines = text.splitlines()
-                        logger.info("成功获取 %s，共 %d 行", url, len(lines))
-
-                        # 逐行解析
-                        count = 0
-                        error_count = 0
-                        for line in lines:
-                            try:
-                                rtype, rule = self._resolver.resolve(line)
-                                if rtype:
-                                    count += 1
-                                    self._store.add_rule(rtype, rule)
-                            except Exception:
-                                error_count += 1
-
-                        self.fetch_stats['success'] += 1
-                        logger.info("处理完成，共添加 %d 条规则", count)
-                        if error_count:
-                            logger.warning("⚠ %d 行解析失败", error_count)
-
-                except requests.RequestException as e:
-                    logger.error("获取 %s 时网络异常: %s", url, e)
-                    self.fetch_stats['failed'] += 1
-                except Exception as e:
-                    logger.error("获取 %s 时出错: %s", url, e, exc_info=True)
-                    self.fetch_stats['failed'] += 1
-
-                logger.info("当前规则数量: %s", self._store.get_status_str())
-
+            for i, (url, is_host_source, is_lite) in enumerate(processed, 1):
+                self._process_single_source(session, url, is_host_source, is_lite, i, total)
         finally:
             session.close()
             # 汇总远程源拉取结果

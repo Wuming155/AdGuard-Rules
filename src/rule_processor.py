@@ -288,3 +288,112 @@ class RuleProcessor:
             "去重完成: Hosts %d 条 → %d 条（去除 %d 条 AdGuard 已覆盖域名）",
             before, after, before - after,
         )
+
+    # ------------------------------------------------------------------
+    # Lite 版白名单清洗
+    # ------------------------------------------------------------------
+
+    def remove_whitelist_from_hosts_lite(self) -> None:
+        """将白名单域名从 hosts_lite 中移除。"""
+        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
+        if not whitelist:
+            return
+
+        logger.info("从 Lite Hosts 规则中移除白名单域名...")
+
+        whitelist_domains: set[str] = set()
+        skipped_wildcards: list[str] = []
+        for rule in whitelist:
+            domain = self.extract_domain(rule)
+            if domain:
+                whitelist_domains.add(domain)
+            elif any(c in rule for c in ('*', '?')):
+                skipped_wildcards.append(rule)
+
+        if skipped_wildcards:
+            display = ', '.join(skipped_wildcards[:5])
+            suffix = '...' if len(skipped_wildcards) > 5 else ''
+            logger.warning(
+                "%d 条包含通配符的白名单规则无法从 Lite Hosts 中移除: %s%s",
+                len(skipped_wildcards), display, suffix,
+            )
+
+        def _is_whitelisted(rule: str) -> bool:
+            parts = rule.split()
+            if len(parts) < 2:
+                return False
+            target_domain = parts[1].lower()
+            return target_domain in whitelist_domains or any(
+                target_domain.endswith('.' + wd) for wd in whitelist_domains
+            )
+
+        removed = self._store.remove_from_collection(
+            RuleStore.R_TYPE_HOSTS_LITE, _is_whitelisted,
+        )
+        logger.info("已从 Lite Hosts 规则中移除 %d 条白名单域名", removed)
+
+    def remove_whitelist_from_adguard_lite(self) -> None:
+        """将白名单域名从 adguard_lite 中移除。"""
+        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
+        if not whitelist:
+            return
+
+        logger.info("从 Lite AdGuard 规则中移除白名单域名...")
+
+        whitelist_domains: set[str] = set()
+        for rule in whitelist:
+            domain = self.extract_domain(rule)
+            if domain:
+                whitelist_domains.add(domain)
+
+        if not whitelist_domains:
+            return
+
+        def _is_whitelisted(rule: str) -> bool:
+            domain = self.extract_domain(rule)
+            return domain is not None and (
+                domain in whitelist_domains
+                or any(domain.endswith('.' + wd) for wd in whitelist_domains)
+            )
+
+        removed = self._store.remove_from_collection(
+            RuleStore.R_TYPE_ADGUARD_LITE, _is_whitelisted,
+        )
+        logger.info("已从 Lite AdGuard 规则中移除 %d 条白名单域名", removed)
+
+    # ------------------------------------------------------------------
+    # Lite Hosts 规则去重（去掉已被 Lite AdGuard 覆盖的域名）
+    # ------------------------------------------------------------------
+
+    def generate_dedup_hosts_lite_rules(self) -> None:
+        """从 hosts_lite 中去掉 adguard_lite 已覆盖的域名。"""
+        logger.info("生成去重 Lite Hosts 规则...")
+
+        # 1. 构建 adguard_lite 域名集合
+        adguard_domains: set[str] = set()
+        for rule in self._store.get_collection(RuleStore.R_TYPE_ADGUARD_LITE):
+            domain = self.extract_domain(rule)
+            if domain:
+                adguard_domains.add(domain)
+
+        before = self._store.get_collection_size(RuleStore.R_TYPE_HOSTS_LITE)
+
+        # 2. 过滤 hosts_lite：去掉域名已在 AdGuard Lite 中出现的
+        dedup_rules: set[str] = set()
+        for rule in self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE):
+            parts = rule.split()
+            if len(parts) >= 2:
+                domain = parts[1].lower()
+                if domain not in adguard_domains:
+                    dedup_rules.add(rule)
+            else:
+                dedup_rules.add(rule)
+
+        # 3. 写入 Lite 去重集合
+        self._store.replace_collection(RuleStore.R_TYPE_HOSTS_LITE_DEDUP, dedup_rules)
+
+        after = len(dedup_rules)
+        logger.info(
+            "Lite 去重完成: Hosts Lite %d 条 → %d 条（去除 %d 条 AdGuard Lite 已覆盖域名）",
+            before, after, before - after,
+        )

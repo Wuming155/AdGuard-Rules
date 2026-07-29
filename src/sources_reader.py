@@ -16,13 +16,19 @@ class SourcesReader:
     """
 
     def __init__(self, adguard_file: str = 'sources_adguard.txt',
-                 host_file: str = 'sources_host.txt'):
+                 host_file: str = 'sources_host.txt',
+                 adguard_lite_file: str = 'sources_adguard_lite.txt',
+                 host_lite_file: str = 'sources_host_lite.txt'):
         """
-        :param adguard_file: AdGuard 格式规则源文件路径
-        :param host_file:    Hosts/域名格式规则源文件路径
+        :param adguard_file:      AdGuard 格式规则源文件路径（完整版）
+        :param host_file:         Hosts 格式规则源文件路径（完整版）
+        :param adguard_lite_file: AdGuard 格式规则源文件路径（精简版）
+        :param host_lite_file:    Hosts 格式规则源文件路径（精简版）
         """
         self._adguard_file = Path(adguard_file)
         self._host_file = Path(host_file)
+        self._adguard_lite_file = Path(adguard_lite_file)
+        self._host_lite_file = Path(host_lite_file)
 
     @property
     def adguard_sources_path(self) -> Path:
@@ -33,6 +39,16 @@ class SourcesReader:
     def host_sources_path(self) -> Path:
         """Hosts 规则源文件路径（只读）。"""
         return self._host_file
+
+    @property
+    def adguard_lite_sources_path(self) -> Path:
+        """AdGuard Lite 规则源文件路径（只读）。"""
+        return self._adguard_lite_file
+
+    @property
+    def host_lite_sources_path(self) -> Path:
+        """Hosts Lite 规则源文件路径（只读）。"""
+        return self._host_lite_file
 
     def _read_file(self, file_path: Path, label: str) -> list[str]:
         """从单个文件读取 URL 列表。
@@ -64,6 +80,14 @@ class SourcesReader:
     def read_host_sources(self) -> list[str]:
         """读取 Hosts 格式规则源 URL 列表。"""
         return self._read_file(self._host_file, 'Hosts')
+
+    def read_adguard_lite_sources(self) -> list[str]:
+        """读取 AdGuard Lite 格式规则源 URL 列表。"""
+        return self._read_file(self._adguard_lite_file, 'AdGuard Lite')
+
+    def read_host_lite_sources(self) -> list[str]:
+        """读取 Hosts Lite 格式规则源 URL 列表。"""
+        return self._read_file(self._host_lite_file, 'Hosts Lite')
 
     def read_sources(self) -> list[str]:
         """读取所有远程规则源 URL 列表（合并两个文件，向后兼容）。
