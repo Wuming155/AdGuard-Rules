@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 10069
-# Last Update: 2026-08-01 12:21:12
+# Last Update: 2026-08-02 12:23:36
 #
 #
 
@@ -2652,7 +2652,6 @@
 0.0.0.0 ad.jp.doubleclick.net
 0.0.0.0 ad.leadbolt.net
 0.0.0.0 ad.leadboltads.net
-0.0.0.0 ad.leadboltapps.net
 0.0.0.0 ad.leadboltmobile.net
 0.0.0.0 ad.linksynergy.com
 0.0.0.0 ad.lofter.com
@@ -2734,6 +2733,7 @@
 0.0.0.0 admimage.biz.weibo.com
 0.0.0.0 admin.baihemob.com
 0.0.0.0 admin.cooguo.com
+0.0.0.0 admin.gestroom.it
 0.0.0.0 admin.jpush.cn
 0.0.0.0 admin.ninebox.cn
 0.0.0.0 admob.xiaomi.com
