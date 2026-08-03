@@ -1,7 +1,7 @@
 # Title: Hosts Rules
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 260444
-# Last Update: 2026-08-02 12:23:36
+# Total Rules: 260447
+# Last Update: 2026-08-03 12:29:20
 #
 #
 
@@ -11931,6 +11931,7 @@
 0.0.0.0 aax-fe.amazon-adsystem.com
 0.0.0.0 aax-gamma-us-east.axp.amazon-adsystem.com
 0.0.0.0 aax-ott-c2s.amazon-adsystem.com
+0.0.0.0 aax-ott-sdk.amazon-adsystem.amazon.com
 0.0.0.0 aax-ott-sdk.amazon-adsystem.com
 0.0.0.0 aax-ott.amazon-adsystem.amazon.com
 0.0.0.0 aax-ott.amazon-adsystem.com
@@ -11961,6 +11962,7 @@
 0.0.0.0 aax-us-west-ott.amazon-adsystem.com
 0.0.0.0 aax-us-west-rtb.amazon-adsystem.com
 0.0.0.0 aax-us-west.amazon-adsystem.com
+0.0.0.0 aax-us.amazon-adsystem.amazon.com
 0.0.0.0 aax-us.amazon-adsystem.com
 0.0.0.0 aax-vx-api-us-east-1.amazon-adsystem.com
 0.0.0.0 aax-vx-api-us-west-2.amazon-adsystem.com
@@ -13497,6 +13499,7 @@
 0.0.0.0 acr-in-prd.samsungcloud.tv
 0.0.0.0 acr-kr-prd.samsungcloud.tv
 0.0.0.0 acr-mx-prd.samsungcloud.tv
+0.0.0.0 acr-nz-prd.samsungcloud.tv
 0.0.0.0 acr-us-prd.samsungcloud.tv
 0.0.0.0 acr0.samsungcloudsolution.com
 0.0.0.0 acrdfrcfapzvn.site

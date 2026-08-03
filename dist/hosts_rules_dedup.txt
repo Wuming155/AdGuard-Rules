@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 10069
-# Last Update: 2026-08-02 12:23:36
+# Last Update: 2026-08-03 12:29:20
 #
 #
 
@@ -7103,6 +7103,7 @@
 0.0.0.0 rs.dalyfeds.com
 0.0.0.0 rsra-ph.cdn-fileserver.com
 0.0.0.0 rsra.cdn-fileserver.com
+0.0.0.0 rsras-ph.cdn-fileserver.com
 0.0.0.0 rsras.cdn-fileserver.com
 0.0.0.0 rt.ad-score.com
 0.0.0.0 rta-bj.oneway.mobi
@@ -10022,7 +10023,6 @@
 0.0.0.0 z1.cnzz.com
 0.0.0.0 z1.zedo.com
 0.0.0.0 z10.cnzz.com
-0.0.0.0 z11.cnzz.com
 0.0.0.0 z12.cnzz.com
 0.0.0.0 z13.cnzz.com
 0.0.0.0 z2.cnzz.com
