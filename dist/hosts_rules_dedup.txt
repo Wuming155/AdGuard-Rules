@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10069
-# Last Update: 2026-08-03 12:29:20
+# Total Rules: 10068
+# Last Update: 2026-08-04 12:12:30
 #
 #
 
@@ -4591,7 +4591,6 @@
 0.0.0.0 dos-track.domob.cn
 0.0.0.0 dotvox.actonservice.com
 0.0.0.0 douyu.grey.voiceads.cn
-0.0.0.0 down.apps.sina.cn
 0.0.0.0 down.diannaodian.com
 0.0.0.0 down.laomaotao.net
 0.0.0.0 down.lltskb.com
