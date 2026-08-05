@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10068
-# Last Update: 2026-08-04 12:12:30
+# Total Rules: 10067
+# Last Update: 2026-08-05 12:00:03
 #
 #
 
@@ -4591,6 +4591,7 @@
 0.0.0.0 dos-track.domob.cn
 0.0.0.0 dotvox.actonservice.com
 0.0.0.0 douyu.grey.voiceads.cn
+0.0.0.0 down.apps.sina.cn
 0.0.0.0 down.diannaodian.com
 0.0.0.0 down.laomaotao.net
 0.0.0.0 down.lltskb.com
@@ -5446,7 +5447,6 @@
 0.0.0.0 img1.360buyimg.com
 0.0.0.0 img1.nend.net
 0.0.0.0 img3.360buyimg.com
-0.0.0.0 img62.ddimg.cn
 0.0.0.0 img7.1133.cc
 0.0.0.0 img9.1133.cc
 0.0.0.0 img9.3393.com
@@ -5687,7 +5687,6 @@
 0.0.0.0 jsadsdisplay.cn-beijing.log.aliyuncs.com
 0.0.0.0 jsapi.qq.com
 0.0.0.0 jsc.adskeeper.co.uk
-0.0.0.0 jsc.marketgid.com
 0.0.0.0 jsc.mgid.com
 0.0.0.0 jserr.cnzz.com
 0.0.0.0 jsjs.nthyn.com
@@ -7102,7 +7101,6 @@
 0.0.0.0 rs.dalyfeds.com
 0.0.0.0 rsra-ph.cdn-fileserver.com
 0.0.0.0 rsra.cdn-fileserver.com
-0.0.0.0 rsras-ph.cdn-fileserver.com
 0.0.0.0 rsras.cdn-fileserver.com
 0.0.0.0 rt.ad-score.com
 0.0.0.0 rta-bj.oneway.mobi
@@ -10022,6 +10020,7 @@
 0.0.0.0 z1.cnzz.com
 0.0.0.0 z1.zedo.com
 0.0.0.0 z10.cnzz.com
+0.0.0.0 z11.cnzz.com
 0.0.0.0 z12.cnzz.com
 0.0.0.0 z13.cnzz.com
 0.0.0.0 z2.cnzz.com
