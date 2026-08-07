@@ -1,7 +1,7 @@
 # Title: Hosts Rules
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 260895
-# Last Update: 2026-08-06 12:11:32
+# Total Rules: 260896
+# Last Update: 2026-08-07 11:50:09
 #
 #
 
@@ -130196,7 +130196,6 @@
 0.0.0.0 maws-aax-eu-rtb-adx.amazon-adsystem.com
 0.0.0.0 maws-aax-eu-rtb.amazon-adsystem.com
 0.0.0.0 maws-aax-eu.amazon-adsystem.com
-0.0.0.0 maws-aax-fe-sin.amazon-adsystem.com
 0.0.0.0 maws-aax-fe.amazon-adsystem.com
 0.0.0.0 maws-aax-us-east-rtb-adx.amazon-adsystem.com
 0.0.0.0 maws-aax-us-east-rtb.amazon-adsystem.com
@@ -198665,6 +198664,7 @@
 0.0.0.0 sponsored-ads-eu.amazon.se
 0.0.0.0 sponsored-ads-fe.amazon-adsystem.com
 0.0.0.0 sponsored-ads-na.amazon-adsystem.com
+0.0.0.0 sponsored-ads.amazon.ae
 0.0.0.0 sponsored-ads.amazon.ca
 0.0.0.0 sponsored-ads.amazon.co.jp
 0.0.0.0 sponsored-ads.amazon.co.uk
@@ -198672,6 +198672,7 @@
 0.0.0.0 sponsored-ads.amazon.com.au
 0.0.0.0 sponsored-ads.amazon.com.br
 0.0.0.0 sponsored-ads.amazon.com.mx
+0.0.0.0 sponsored-ads.amazon.eg
 0.0.0.0 sponsored-ads.amazon.es
 0.0.0.0 sponsored-ads.amazon.fr
 0.0.0.0 sponsored-ads.amazon.in
