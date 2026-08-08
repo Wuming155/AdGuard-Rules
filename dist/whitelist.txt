@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
 ! Total Rules: 152
-! Last Update: 2026-08-07 11:50:09
+! Last Update: 2026-08-08 10:55:21
 !
 !
 
