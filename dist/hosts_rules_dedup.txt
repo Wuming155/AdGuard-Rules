@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10068
-# Last Update: 2026-08-07 11:50:09
+# Total Rules: 10067
+# Last Update: 2026-08-08 10:55:21
 #
 #
 
@@ -7867,7 +7867,6 @@
 0.0.0.0 stats.g.doubleclick.net
 0.0.0.0 stats.ipinyou.com
 0.0.0.0 stats.jpush.cn
-0.0.0.0 stats.magicwindow.cn
 0.0.0.0 stats.pflexads.com
 0.0.0.0 stats.phoenix-widget.com
 0.0.0.0 stats.umsns.com
