@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 10067
-# Last Update: 2026-08-08 10:55:21
+# Last Update: 2026-08-09 11:03:01
 #
 #
 
