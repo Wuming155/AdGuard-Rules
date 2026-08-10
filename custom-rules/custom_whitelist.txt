@@ -35,8 +35,6 @@ a.market.xiaomi.com
 browser.miui.com
 api.browser.miui.com
 # 小米安全与通信服务
-api.sec.miui.com
-srv.sec.miui.com
 testit.miui.com
 api.comm.miui.com
 api.developer.xiaomi.com
