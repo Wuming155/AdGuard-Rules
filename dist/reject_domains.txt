@@ -1,7 +1,7 @@
 # Title: Reject Domains List
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 833675
-# Last Update: 2026-08-12 09:53:14
+# Total Rules: 833697
+# Last Update: 2026-08-12 11:22:25
 #
 # Mihomo/Clash rule-provider 配置示例:
 #   - type: http
@@ -10751,6 +10751,7 @@
 27lelchgcvs2wpm7.xkfi59.top
 27lelchgcvs2wpm7.xmvr54.top
 27lou.com
+27ls.com
 27maoaf.com
 27maoah.com
 27maoba.com
@@ -19275,6 +19276,7 @@
 51ichigua8.com
 51ichigua9.com
 51isbn.com
+51isd.com
 51jd.cc
 51jiankangw.com
 51jiasudu.com
@@ -56489,6 +56491,7 @@ ahfsmall.com
 ahfvirogw.in
 ahfxdqlnlwpyz.site
 ahfxjz.com
+ahfyyh.com
 ahfzzc.konfio.mx
 ahg758.com
 ahge.info
@@ -56905,6 +56908,7 @@ ai-midoo.com
 ai-milfs.top
 ai-nudes.ai
 ai-nudes.app
+ai-pop.com
 ai-porn-free.com
 ai-porn-gen.com
 ai-porn-generator.co
@@ -95138,6 +95142,7 @@ bain-femmesexy.blogspot.com
 baina-ad.com
 bainahr.com.cn
 bainaqg.com
+bainashop.com
 baindeminuit.blogspot.com
 baindesperme.free.fr
 baindeterre.com.cn
@@ -98846,6 +98851,7 @@ bbjl.mobi
 bbjzzssj.com
 bbk.com.au
 bbk.pnc.com
+bbk886.com
 bbkaskus-net.blogspot.com
 bbkbuy.com
 bbkdlawi.com
@@ -141244,6 +141250,7 @@ camxxx-adultcams-ch.pages.dev
 camxxx-babecams-co-uk.pages.dev
 camxxx-camsexe-fr.pages.dev
 camxxx-freesexcams-ch.pages.dev
+camxxx-freesexcams-nl.pages.dev
 camxxx-gratiswebcamsex-be.pages.dev
 camxxx-maturecams-uk.pages.dev
 camxxx-nakedcams-co-uk.pages.dev
@@ -310693,6 +310700,7 @@ gzgangguan.com
 gzganli.com
 gzgaogao.com.cn
 gzgcwl.com
+gzgdjg.com
 gzgedun.com
 gzgejhwjeoufd.store
 gzgevemia.com.cn
@@ -340679,6 +340687,7 @@ hube.cc
 hubeamily.com
 hubeibbs.net
 hubeifangming.com
+hubeifarm.com
 hubeiu.org.cn
 hubeixiezhi.com
 hubert.branch.rocks
@@ -370285,6 +370294,7 @@ jiagongcn.com
 jiahedb.com
 jiahefmcz.com
 jiahefrj.com
+jiahefz.com
 jiahehnt.com
 jiahei.com.cn
 jiahongtai.com
@@ -393583,6 +393593,7 @@ laibacaiyi.com
 laiberation.fr
 laibilu.mom
 laicai.tv
+laicaibh.com
 laicsownsew.com
 laid.com
 laidafeiji.shop
@@ -422757,6 +422768,7 @@ lxisvvxfdqozy.site
 lxiuhfmibptqt.space
 lxj959.sbs
 lxjcd.com.cn
+lxjcsm.com
 lxjhcvabfkjuo.space
 lxjywedu.com
 lxkiqokunemfn.space
@@ -440417,6 +440429,7 @@ meiyingvideo.net
 meiyounai.com.cn
 meiyouzhan.com
 meiyuana.shop
+meiyuanxx.com
 meiyuj.tk
 meizhongyihe.com.cn
 meizi.in
@@ -446167,6 +446180,7 @@ midgesdwelled.shop
 midget-love.com
 midget-porn-xxx.com
 midget-porn1.com
+midget-sex1.com
 midgetbangers.com
 midgetbreakfast.com
 midgetfuck.blogspot.com
@@ -458101,6 +458115,7 @@ movieonlinejav.blogspot.com
 moviepics.com
 moviepleasures.com
 movieplex.co.in
+movieplex.garden
 movieplex.study
 movieplex.team
 movieplex1.space
@@ -458933,6 +458948,7 @@ mradultsexdating.com
 mradx.net
 mragfzb.xyz
 mrahmd.com
+mraish.com
 mramor-i-granit.ru
 mranal.blogspot.com
 mranal.com
@@ -459699,6 +459715,7 @@ msexch2k13.hyipfanclub.eu
 msexch2k13.ius.fr
 msexch2k13.jej.fr
 msexch2k13.mcsbonline.com
+msexch2k13.prowessec.com
 msexch2k13.smatstartinc.com
 msexch2k13.tec.fr
 msexch2k13.tpv.fr
@@ -459958,6 +459975,7 @@ msq985.top
 msqa.com.cn
 msqcgc.com
 msqj.com.cn
+msqkj.com
 msqv.com.cn
 msr.alpinefoxshop.ch
 msr.boldmatters.ch
@@ -460917,6 +460935,7 @@ mult-porno.fun
 mult-porno.info
 mult-porno.live
 mult-porno.me
+mult-porno.mom
 mult-porno.online
 mult-porno.page
 mult-porno.pro
@@ -461077,6 +461096,7 @@ multporno.org
 multporno.team
 multporno.top
 multporno.vip
+multporno.world
 multqaalarab.com
 multstorage.com
 multurimfidge.cyou
@@ -461739,6 +461759,7 @@ musicstorez.net
 musicstorez.org
 musicsurf.tk
 musictag.ir
+musicva.ir
 musicvideosx.tk
 musicvidstroker.blogspot.com
 musicvl.com
@@ -462969,6 +462990,7 @@ my580.com
 my5k.net
 my5ownhearth.tk
 my6.info
+my6.xyz
 my661.sbs
 my67t.com
 my69x.blogspot.com
@@ -468494,6 +468516,7 @@ n796.com
 n7fyrdeen.com
 n7l.top
 n807.com
+n808.top
 n813.com
 n8165.com
 n818.timesherald.com
@@ -469237,6 +469260,7 @@ naked-massage-istanbul.top
 naked-massage-san-diego.top
 naked-massage-warsaw.top
 naked-mature-women.com
+naked-milf.pics
 naked-models.com
 naked-models.net
 naked-moms.com
@@ -472590,6 +472614,7 @@ nbcxa65t001z.net.jumia.ug
 nbdaton.net.cn
 nbdebten0.wealthyguardian.net
 nbdeyifeng.com
+nbdingsan.com
 nbdiscount.com
 nbdnewsw.com
 nbdonar.com
@@ -472794,6 +472819,7 @@ ncbbkj.com.cn
 ncbox.at
 ncbus.com.cn
 ncbvr.workmanusa.com
+ncbxjhj.com
 ncbyqh.com
 ncc.avast.com
 ncc.nip-col.jp
@@ -473507,6 +473533,7 @@ nederlandsewebcams.nl
 nederlandsex.com
 nederlandsexdate.nl
 nederlandsexting.com
+nederlandwebcamsex.nl
 nederporn.tv
 nederseks.nl
 nedflirtingnursery.com
@@ -473820,6 +473847,7 @@ neikanchina.com
 neikdatingpics.blogspot.com
 neiku.org
 neiladoralyn.su
+neilcurrielmt.com
 neile8.net.cn
 neilhoticapwz.space
 neilrough.com
@@ -474069,6 +474097,7 @@ neonblu.com
 neoncams.cz
 neoncams.sk
 neoncsr21.net.anwalt.de
+neonelven.blog
 neonhairadult.com
 neonkangaroo.itch.io
 neonlitesjokesandbabes.blogspot.com
@@ -477341,7 +477370,6 @@ newxxxgays.com
 newxxxhd.net
 newxxxpics.net
 newxxxpornvideo.com
-newxxxsex.com
 newxxxsites.com
 newxxxteen.com
 newxxxtube.com
@@ -478278,7 +478306,6 @@ nhzx.org.cn
 ni.profliste.com
 ni0.top
 ni092.com
-ni32.top
 ni3ebfpqwpq.hcwwgqp7lkmqogu.cyou
 ni43.com
 ni5.info
@@ -478995,7 +479022,6 @@ niggatranny.com
 nigged.com
 nigger-tits-hot-bodies-wild-c.blogspot.com
 niggerdatabase.gay
-niggers.xxx
 niggersex.com
 niggersex.pro
 niggerworship.org
@@ -480058,7 +480084,6 @@ niuniu519.com
 niuniunaiba.com
 niuniuvideo.com
 niupix.com.cn
-niurang.com
 niushif.shop
 niutransvet.com
 niutruenorth.com
@@ -480151,7 +480176,6 @@ njanrui.com.cn
 njatwiklklyae.site
 njav.casa
 njav.com
-njav.live
 njav.org
 njav.ru
 njav.sbs
@@ -481119,9 +481143,7 @@ nnmh.info
 nnmh.me
 nnmodels.bz
 nnmtools.com
-nnneee.com
 nnnhzfzuycmfh.site
-nnniii.com
 nnnkx11.com
 nnnkx2.com
 nnnkx2.top
