@@ -6,8 +6,8 @@ https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ad
 https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-adguard.txt
 # hagezi 威胁情报（medium）
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt
-# hagezi 成人内容
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/nsfw.txt
+# oisd 成人内容
+https://nsfw.oisd.nl
 # hagezi 赌博（mini）
 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/gambling.txt
 # hagezi 厂商内置追踪器
