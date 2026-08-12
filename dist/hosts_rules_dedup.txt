@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10146
-# Last Update: 2026-08-11 11:02:47
+# Total Rules: 10144
+# Last Update: 2026-08-12 09:53:14
 #
 #
 
@@ -2882,7 +2882,6 @@
 0.0.0.0 adsmart.yicha.cn
 0.0.0.0 adsmartget.guangtuikeji.com
 0.0.0.0 adsmartgetbes.pinyuconn.cn
-0.0.0.0 adson.awempire.com
 0.0.0.0 adsoss.zhinengxiyifang.cn
 0.0.0.0 adspaces.ero-advertising.com
 0.0.0.0 adspecs.yahoo.com
@@ -6865,7 +6864,6 @@
 0.0.0.0 proffiliatesinc.actonservice.com
 0.0.0.0 progressivedev.actonservice.com
 0.0.0.0 prom.b.qq.com
-0.0.0.0 promo.awempire.com
 0.0.0.0 promotionspr.actonservice.com
 0.0.0.0 propay.actonservice.com
 0.0.0.0 prospex.actonservice.com
