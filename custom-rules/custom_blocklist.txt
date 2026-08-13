@@ -5,7 +5,7 @@
 #屏蔽vivo遥测
 ||vcode-od.vivo.com.cn^$
 
-#屏蔽 AdGuard 内部注入域名（配合 anti_whitelist 使用）
+#屏蔽 AdGuard 内部注入域名
 ||local.adguard.org^
 #运营商相关屏蔽
 0.0.0.0 auth.wosms.cn
@@ -129,35 +129,27 @@
 
 # 荣耀运动健康
 
-# ===== 广告（屏蔽后无广告，功能不受影响）=====
-# 广告请求 API
+# ===== 广告 =====
 ||ads-drcn.platform.hihonorcloud.com^
-# 广告素材 CDN
 ||adplatform-drcn.hihonorcdn.com^
-# 广告投诉页（低价值，可留）
 ||contentplatform-drcn.hihonorcdn.com^
 
-# ===== 遥测/大数据/日志（设备级数据，非手机号；屏蔽只断遥测）=====
-# AccessCloud 大数据上报
+# ===== 遥测/日志（屏蔽只断遥测）=====
 ||dap-cn.c.hihonor.com^
-# 华为 HA 行为遥测
 ||metrics-drcn.dt.hihonorcloud.com^
-# 日志上报
 ||logservice-drcn.dt.hihonorcloud.com^
-# 广告遥测（仅影响广告统计）
 ||metrics-ad-drcn.dt.hihonorcloud.com^
 
-# ===== 软件更新（屏蔽后不再提示更新；建议保留，除非想禁用更新）=====
-# 更新检查服务（生产）
+# ===== 软件更新（屏蔽后不再提示更新）=====
 ||update-drcn.platform.hihonorcloud.com^
-# 更新检查服务（测试环境，一般用不上）
 ||update-check-test.test.hihonor.com^
 
-# ===== 菜鸟穿山甲广告
+# ===== 菜鸟穿山甲广告 =====
 ||pangolin-sdk-toutiao.com^
-# 素材/静态资源（子域精确匹配，避免误伤字节系其他内容） 
 ||sf3-fe-tos.pglstatp-toutiao.com^
-# 素材 CDN
 ||cdn-tos-cn.bytedance.net^
-# SDK 配置
 ||scc.bytedance.com^
+
+# 某个知名软件
+||gdt.qq.com^
+||ugdtimg.com^
