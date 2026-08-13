@@ -17,8 +17,8 @@ from _analyze import analyze_category, read_source_urls
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_FILES = {
-    'AdGuard': PROJECT_ROOT / 'sources_adguard.txt',
-    'Hosts':   PROJECT_ROOT / 'sources_host.txt',
+    'AdGuard': PROJECT_ROOT / 'sources' / 'sources_adguard.txt',
+    'Hosts':   PROJECT_ROOT / 'sources' / 'sources_host.txt',
 }
 
 SEP = '=' * 60

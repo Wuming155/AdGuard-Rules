@@ -16,7 +16,7 @@ from _cache import fetch
 from _analyze import analyze_category, read_source_urls, extract_domains
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SOURCE_FILE = PROJECT_ROOT / 'sources_adguard.txt'
+SOURCE_FILE = PROJECT_ROOT / 'sources' / 'sources_adguard.txt'
 
 
 def main():

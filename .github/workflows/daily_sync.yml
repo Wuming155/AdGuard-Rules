@@ -6,8 +6,7 @@ on:
   workflow_dispatch:      # 允许手动在 GitHub 页面点击运行
   push:
     paths:
-      - 'sources_adguard.txt'
-      - 'sources_host.txt'
+      - 'sources/**'
       - 'main_executor.py'
       - 'custom-rules/**'
       - 'src/**'           # 代码修改后自动重新生成

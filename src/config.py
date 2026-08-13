@@ -11,10 +11,10 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True)
 class PathConfig:
     """文件路径相关配置"""
-    sources_adguard_file: str = 'sources_adguard.txt'
-    sources_host_file: str = 'sources_host.txt'
-    sources_adguard_lite_file: str = 'sources_adguard_lite.txt'
-    sources_host_lite_file: str = 'sources_host_lite.txt'
+    sources_adguard_file: str = 'sources/sources_adguard.txt'
+    sources_host_file: str = 'sources/sources_host.txt'
+    sources_adguard_lite_file: str = 'sources/sources_adguard_lite.txt'
+    sources_host_lite_file: str = 'sources/sources_host_lite.txt'
     dist_dir: str = 'dist'
     custom_rules_dir: str = 'custom-rules'
     readme_path: str = 'README.md'
