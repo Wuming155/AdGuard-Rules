@@ -8,10 +8,3 @@ https://raw.githubusercontent.com/blocklistproject/Lists/master/drugs.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/master/ransomware.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/master/scam.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/master/redirect.txt
-# hagezi 厂商内置追踪器 —— 各品牌设备/系统遥测与行为分析域名
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.amazon-onlydomains.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.apple-onlydomains.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.huawei-onlydomains.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.samsung-onlydomains.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.tiktok-onlydomains.txt
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.xiaomi-onlydomains.txt
