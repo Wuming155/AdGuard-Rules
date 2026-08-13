@@ -10,15 +10,15 @@ class SourcesReader:
     """规则源读取器
 
     支持两个独立的规则源文件：
-      - AdGuard 源文件（sources_adguard.txt）
-      - Hosts 源文件（sources_host.txt）
+      - AdGuard 源文件（sources/sources_adguard.txt）
+      - Hosts 源文件（sources/sources_host.txt）
     分别读取后用于不同的超时策略。
     """
 
-    def __init__(self, adguard_file: str = 'sources_adguard.txt',
-                 host_file: str = 'sources_host.txt',
-                 adguard_lite_file: str = 'sources_adguard_lite.txt',
-                 host_lite_file: str = 'sources_host_lite.txt'):
+    def __init__(self, adguard_file: str = 'sources/sources_adguard.txt',
+                 host_file: str = 'sources/sources_host.txt',
+                 adguard_lite_file: str = 'sources/sources_adguard_lite.txt',
+                 host_lite_file: str = 'sources/sources_host_lite.txt'):
         """
         :param adguard_file:      AdGuard 格式规则源文件路径（完整版）
         :param host_file:         Hosts 格式规则源文件路径（完整版）
