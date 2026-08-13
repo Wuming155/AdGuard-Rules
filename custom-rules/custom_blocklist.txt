@@ -148,8 +148,6 @@
 ||metrics-ad-drcn.dt.hihonorcloud.com^
 
 # ===== 软件更新（屏蔽后不再提示更新；建议保留，除非想禁用更新）=====
-# 更新检查：POST /Ring2/v2/Check.action（Ring 服务）
-# 更新包下载：由检查响应返回的 baseUrl 提供（动态，通常落在 hihonorcdn/hihonorcloud 存储）
 # 更新检查服务（生产）
 ||update-drcn.platform.hihonorcloud.com^
 # 更新检查服务（测试环境，一般用不上）
