@@ -1,7 +1,7 @@
 # Title: Reject Domains List
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 835966
-# Last Update: 2026-08-13 18:52:47
+# Last Update: 2026-08-13 19:12:38
 #
 # Mihomo/Clash rule-provider 配置示例:
 #   - type: http
