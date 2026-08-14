@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
-! Total Rules: 151
-! Last Update: 2026-08-14 11:25:00
+! Total Rules: 152
+! Last Update: 2026-08-15 05:10:58
 !
 !
 
@@ -63,6 +63,7 @@
 @@||conn3.coloros.com^
 @@||conn4.coloros.com^
 @@||conn5.coloros.com^
+@@||connect.rom.miui.com^
 @@||counter-strike.net^
 @@||dui88.com^
 @@||duiba.com.cn^
