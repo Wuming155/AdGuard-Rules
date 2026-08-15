@@ -4,8 +4,6 @@ https://raw.githubusercontent.com/Cats-Team/AdRules/main/dns.txt
 https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/AWAvenue-Ads-Rule.txt
 # anti-AD 广告拦截（AdGuard格式）
 https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-adguard.txt
-# blocklistproject 广告
-https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/ads-ags.txt
 # oisd 成人内容
 https://nsfw.oisd.nl
 
@@ -17,4 +15,3 @@ https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/scam-ags.t
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/redirect-ags.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/fraud-ags.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/malware-ags.txt
-https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/tracking-ags.txt
