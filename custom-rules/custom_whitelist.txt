@@ -19,6 +19,7 @@ resolver.gslb.mi-idc.com
 api.xmpush.xiaomi.com
 # 小米云服务（相册/状态/API）
 micloud.xiaomi.net
+api.device.xiaomi.net
 a0.app.xiaomi.com
 thm.market.xiaomi.com
 t1.market.xiaomi.com
