@@ -17,5 +17,4 @@ https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/scam-ags.t
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/redirect-ags.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/fraud-ags.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/malware-ags.txt
-https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/porn-ags.txt
 https://raw.githubusercontent.com/blocklistproject/Lists/main/adguard/tracking-ags.txt
