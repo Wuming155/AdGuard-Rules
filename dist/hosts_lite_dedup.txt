@@ -1,7 +1,7 @@
 # Title: Hosts Lite Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 10113
-# Last Update: 2026-08-15 10:14:21
+# Last Update: 2026-08-15 13:57:27
 #
 #
 
