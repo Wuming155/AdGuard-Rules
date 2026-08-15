@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
-! Total Rules: 150
-! Last Update: 2026-08-15 13:57:27
+! Total Rules: 151
+! Last Update: 2026-08-15 16:30:38
 !
 !
 
@@ -27,6 +27,7 @@
 @@||api.browser.miui.com^
 @@||api.comm.miui.com^
 @@||api.developer.xiaomi.com^
+@@||api.device.xiaomi.net^
 @@||api.huangye.miui.com^
 @@||api.live.bilibili.com^
 @@||api.trae.cn^
