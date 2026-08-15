@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
-! Total Rules: 152
-! Last Update: 2026-08-15 10:14:21
+! Total Rules: 150
+! Last Update: 2026-08-15 13:57:27
 !
 !
 
@@ -29,7 +29,6 @@
 @@||api.developer.xiaomi.com^
 @@||api.huangye.miui.com^
 @@||api.live.bilibili.com^
-@@||api.micloud.xiaomi.net^
 @@||api.trae.cn^
 @@||api.vip.miui.com^
 @@||api.xmpush.xiaomi.com^
@@ -75,7 +74,6 @@
 @@||file-contents-abc.obs.cn-north-4.myhuaweicloud.com^
 @@||ftp.bmp.ovh^
 @@||future.biz.weibo.com^
-@@||galleryapi.micloud.xiaomi.net^
 @@||gia.jd.com^
 @@||i.xiaomi.com^
 @@||i6.weather.oppomobile.com^
@@ -88,6 +86,7 @@
 @@||lllocation.ximalaya.com^
 @@||log.mmstat.com^
 @@||meizu.coapi.moji.com^
+@@||micloud.xiaomi.net^
 @@||ms.bdstatic.com^
 @@||msdk.qq.com^
 @@||myhkw.cn^
@@ -124,7 +123,6 @@
 @@||staticsns.cdn.bcebos.com^
 @@||stats.gov.cn^
 @@||stats.uptimerobot.com^
-@@||statusapi.micloud.xiaomi.net^
 @@||storage.live.com^
 @@||sysupgrade.vivo.com.cn^
 @@||szlong.weixin.qq.com^
