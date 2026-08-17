@@ -1,7 +1,7 @@
 ! Title: Whitelist
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
-! Total Rules: 151
-! Last Update: 2026-08-17 10:19:23
+! Total Rules: 152
+! Last Update: 2026-08-17 12:48:22
 !
 !
 
@@ -86,6 +86,7 @@
 @@||lf6-cdn-tos.bytecdntp.com^
 @@||lllocation.ximalaya.com^
 @@||log.mmstat.com^
+@@||mdap.alipay.com^
 @@||meizu.coapi.moji.com^
 @@||micloud.xiaomi.net^
 @@||ms.bdstatic.com^

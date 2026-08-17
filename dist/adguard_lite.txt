@@ -1,7 +1,7 @@
 ! Title: AdGuard Lite
 ! Homepage: https://github.com/Wuming155/AdGuard-Rules
 ! Total Rules: 192409
-! Last Update: 2026-08-17 10:19:23
+! Last Update: 2026-08-17 12:48:22
 !
 !
 
