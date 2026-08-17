@@ -46,6 +46,9 @@ cnbj1.fds.api.xiaomi.com
 cn.app.chat.xiaomi.net
 app.chat.xiaomi.net
 
+# 支付宝安全账户
+mdap.alipay.com
+
 # --- OPPO / ColorOS / HeyTap ---
 # OPPO 应用商店及推送通道
 apps.coloros.com
