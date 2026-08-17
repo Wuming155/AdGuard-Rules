@@ -18,5 +18,5 @@ AdGuard 广告过滤规则合集，每日自动更新。
 | hosts_rules_dedup.txt | 去重版，去掉 AdGuard 已覆盖域名，可搭配 adguard_rules.txt 使用 | 10138 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/hosts_rules_dedup.txt) |
 | adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 1086621 | [点击下载](https://raw.githubusercontent.com/Wuming155/AdGuard-Rules/main/dist/adguard_rules.txt) |
 
-⏰ 最后更新: 2026-08-17 10:19:25
+⏰ 最后更新: 2026-08-17 12:48:24
 
