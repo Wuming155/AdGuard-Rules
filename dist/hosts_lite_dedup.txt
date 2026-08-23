@@ -1,7 +1,7 @@
 # Title: Hosts Lite Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10111
-# Last Update: 2026-08-22 10:16:32
+# Total Rules: 10112
+# Last Update: 2026-08-23 10:23:27
 #
 #
 
@@ -2739,6 +2739,7 @@
 0.0.0.0 admimage.biz.weibo.com
 0.0.0.0 admin.baihemob.com
 0.0.0.0 admin.cooguo.com
+0.0.0.0 admin.gestroom.it
 0.0.0.0 admin.jpush.cn
 0.0.0.0 admin.ninebox.cn
 0.0.0.0 admob.xiaomi.com
