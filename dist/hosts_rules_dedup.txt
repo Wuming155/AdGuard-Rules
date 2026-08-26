@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 10137
-# Last Update: 2026-08-25 10:18:14
+# Last Update: 2026-08-26 10:24:34
 #
 #
 
@@ -2737,12 +2737,12 @@
 0.0.0.0 adm3.autoimg.cn
 0.0.0.0 admarvel.top
 0.0.0.0 admaster-public.51downapp.cn
+0.0.0.0 admaster.cc
 0.0.0.0 admaster.com.cn
 0.0.0.0 admeld.adnxs.com
 0.0.0.0 admimage.biz.weibo.com
 0.0.0.0 admin.baihemob.com
 0.0.0.0 admin.cooguo.com
-0.0.0.0 admin.gestroom.it
 0.0.0.0 admin.jpush.cn
 0.0.0.0 admin.ninebox.cn
 0.0.0.0 admob.xiaomi.com
