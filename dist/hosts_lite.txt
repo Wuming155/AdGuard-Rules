@@ -1,7 +1,7 @@
 # Title: Hosts Lite
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
 # Total Rules: 110598
-# Last Update: 2026-08-26 10:24:34
+# Last Update: 2026-08-27 18:53:23
 #
 #
 
