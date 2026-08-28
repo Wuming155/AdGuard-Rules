@@ -1,7 +1,7 @@
 # Title: Hosts Lite Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10112
-# Last Update: 2026-08-27 18:53:23
+# Total Rules: 10111
+# Last Update: 2026-08-28 20:29:08
 #
 #
 
@@ -4688,7 +4688,6 @@
 0.0.0.0 e.cdfzcz.com
 0.0.0.0 e.changyan.sohu.com
 0.0.0.0 e.cn.miaozhen.com
-0.0.0.0 e.crashlytics.com
 0.0.0.0 e.domob.cn
 0.0.0.0 e.domob.com.cn
 0.0.0.0 e.duomeng.org
