@@ -43,8 +43,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # dist/ 为本地生成产物，已被 .gitignore 忽略，不再入库同步；
-          # 仅提交 README 统计、custom-rules 等被跟踪文件的变更
+          # dist/ 已被 .gitignore 忽略：规则文件不进 git 仓库（避免仓库膨胀），
+          # 改为在下一步以 Release 附件形式分发
           git add .
           
           if [ -n "$(git status --porcelain)" ]; then
@@ -62,3 +62,24 @@ jobs:
           else
             echo "No changes detected, skipping commit."
           fi
+
+      - name: Publish Rule Files to Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG=rules
+
+          # tag 始终指向当前 main：monthly_cleanup 重写历史后，旧的 tag 指向会失效
+          git tag -f "$TAG"
+          git push -f origin "$TAG"
+
+          # 固定 tag：附件每天被同名覆盖，Release 体积恒定，下载地址永久有效
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.txt --clobber
+          else
+            gh release create "$TAG" \
+              --title "AdGuard 过滤规则" \
+              --notes "每日自动更新的规则文件，附件始终为最新一次生成结果（同名附件会被覆盖）。" \
+              dist/*.txt
+          fi
+          gh release edit "$TAG" --latest

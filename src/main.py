@@ -81,36 +81,8 @@ class PrintSummaryStep(PipelineStep):
         self._store.print_summary()
 
 
-class RemoveWhitelistFromHostsStep(PipelineStep):
-    """步骤 4：从 Hosts 规则中移除白名单域名（必须在去重生成前）"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "Hosts 白名单清洗"
-
-    def execute(self) -> None:
-        self._processor.remove_whitelist_from_hosts()
-
-
-class RemoveWhitelistFromAdguardStep(PipelineStep):
-    """步骤 5：从 AdGuard 规则中移除白名单域名"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "AdGuard 白名单清洗"
-
-    def execute(self) -> None:
-        self._processor.remove_whitelist_from_adguard()
-
-
 class GenerateDedupHostsStep(PipelineStep):
-    """步骤 6：生成去重 Hosts 规则（去掉 AdGuard 已覆盖的域名）"""
+    """步骤 4：生成去重 Hosts 规则（去掉 AdGuard 已覆盖的域名）"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -123,36 +95,8 @@ class GenerateDedupHostsStep(PipelineStep):
         self._processor.generate_dedup_hosts_rules()
 
 
-class RemoveWhitelistFromHostsLiteStep(PipelineStep):
-    """步骤 7：从 Lite Hosts 规则中移除白名单域名"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "Lite Hosts 白名单清洗"
-
-    def execute(self) -> None:
-        self._processor.remove_whitelist_from_hosts_lite()
-
-
-class RemoveWhitelistFromAdguardLiteStep(PipelineStep):
-    """步骤 8：从 Lite AdGuard 规则中移除白名单域名"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "Lite AdGuard 白名单清洗"
-
-    def execute(self) -> None:
-        self._processor.remove_whitelist_from_adguard_lite()
-
-
 class GenerateDedupHostsLiteStep(PipelineStep):
-    """步骤 9：生成去重 Lite Hosts 规则（去掉 Lite AdGuard 已覆盖的域名）"""
+    """步骤 5：生成去重 Lite Hosts 规则（去掉 Lite AdGuard 已覆盖的域名）"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -166,7 +110,7 @@ class GenerateDedupHostsLiteStep(PipelineStep):
 
 
 class WriteRulesStep(PipelineStep):
-    """步骤 10：将规则集合写入文件"""
+    """步骤 6：将规则集合写入文件"""
 
     def __init__(self, file_handler: FileHandler, rule_store: RuleStore):
         self._fh = file_handler
@@ -179,32 +123,18 @@ class WriteRulesStep(PipelineStep):
     def execute(self) -> None:
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # 遍历规则集合写入文件
-        for rtype in RuleStore.ALL_RULE_TYPES:
+        for rtype in RuleStore.OUTPUT_RULE_TYPES:
             rules = self._store.get_collection(rtype)
-            self._fh.write_rules_file(rtype, set(rules), update_time)
-
-        # 去重版 Hosts 规则单独写出
-        dedup = self._store.get_collection(RuleStore.R_TYPE_HOSTS_DEDUP)
-        self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_DEDUP, set(dedup), update_time)
-
-        # Lite 版规则写出
-        adguard_lite = self._store.get_collection(RuleStore.R_TYPE_ADGUARD_LITE)
-        self._fh.write_rules_file(RuleStore.R_TYPE_ADGUARD_LITE, set(adguard_lite), update_time)
-
-        hosts_lite = self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE)
-        self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_LITE, set(hosts_lite), update_time)
-
-        hosts_lite_dedup = self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE_DEDUP)
-        self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_LITE_DEDUP, set(hosts_lite_dedup), update_time)
+            self._fh.write_rules_file(rtype, rules, update_time)
 
 
 class UpdateStatsStep(PipelineStep):
-    """步骤 11：更新 README 统计"""
+    """步骤 7：更新 README 统计"""
 
-    def __init__(self, file_handler: FileHandler, config: Config):
+    def __init__(self, file_handler: FileHandler, config: Config, rule_store: RuleStore):
         self._fh = file_handler
         self._config = config
+        self._store = rule_store
 
     @property
     def name(self) -> str:
@@ -212,9 +142,20 @@ class UpdateStatsStep(PipelineStep):
 
     def execute(self) -> None:
         all_stats = self._fh.get_file_stats(self._config.dist_dir)
-        # 过滤掉不需要展示的文件（白名单已内嵌到规则中，不单独列出）
-        all_stats = [s for s in all_stats if s['name'] not in ('whitelist.txt',)]
+
+        # 只统计本次实际产出的文件，避免 dist/ 中的历史残留混入表格。
+        # whitelist.txt 已在独立章节展示，不重复列入统计表格。
+        expected_names = {
+            f"{rtype}.txt"
+            for rtype in RuleStore.OUTPUT_RULE_TYPES
+            if rtype != RuleStore.R_TYPE_WHITELIST
+        }
+        all_stats = [s for s in all_stats if s['name'] in expected_names]
+
         self._fh.update_readme(all_stats)
+        # 将生效白名单规则（含远程源提取）展示到 README（随定时任务自动更新）
+        whitelist_rules = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
+        self._fh.update_whitelist_in_readme(whitelist_rules)
 
 
 # ======================================================================
@@ -276,20 +217,14 @@ class MainExecutor:
 
             PrintSummaryStep(self.rule_store),
 
-            # 白名单清洗必须在去重生成前执行
-            RemoveWhitelistFromHostsStep(self.rule_processor),
-            RemoveWhitelistFromAdguardStep(self.rule_processor),
-
-            # Hosts 去重必须在白名单清洗之后、写入之前
+            # Hosts 去重（生成去重版规则）
             GenerateDedupHostsStep(self.rule_processor),
 
             # Lite 版规则处理
-            RemoveWhitelistFromHostsLiteStep(self.rule_processor),
-            RemoveWhitelistFromAdguardLiteStep(self.rule_processor),
             GenerateDedupHostsLiteStep(self.rule_processor),
 
             WriteRulesStep(self.file_handler, self.rule_store),
-            UpdateStatsStep(self.file_handler, self.config),
+            UpdateStatsStep(self.file_handler, self.config, self.rule_store),
         ]
 
     # ------------------------------------------------------------------

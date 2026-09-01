@@ -19,9 +19,21 @@ class RuleStore:
     R_TYPE_ADGUARD_LITE: str = 'adguard_lite'
     R_TYPE_HOSTS_LITE_DEDUP: str = 'hosts_lite_dedup'
 
+    # 由远程/本地源直接采集的集合
     ALL_RULE_TYPES = frozenset({
         R_TYPE_HOSTS, R_TYPE_WHITELIST, R_TYPE_ADGUARD,
     })
+
+    # 需要落盘为 dist/*.txt 的集合（含派生集合）
+    OUTPUT_RULE_TYPES = (
+        R_TYPE_ADGUARD,
+        R_TYPE_HOSTS,
+        R_TYPE_HOSTS_DEDUP,
+        R_TYPE_ADGUARD_LITE,
+        R_TYPE_HOSTS_LITE,
+        R_TYPE_HOSTS_LITE_DEDUP,
+        R_TYPE_WHITELIST,
+    )
 
     # ------------------------------------------------------------------
     # 初始化
@@ -80,23 +92,6 @@ class RuleStore:
             logger.warning("尝试替换未知集合 '%s'", name)
             return
         self.collections[name] = rules
-
-    def remove_from_collection(self, name: str, predicate: callable) -> int:
-        """从集合中移除满足谓词的规则。
-
-        :param name:      集合名称
-        :param predicate: 谓词函数 rule → bool（True 表示应移除）
-        :returns: 移除的规则数
-        """
-        if name not in self.collections:
-            logger.warning("尝试从未知集合 '%s' 移除", name)
-            return 0
-
-        target = self.collections[name]
-        before = len(target)
-        self.collections[name] = {r for r in target if not predicate(r)}
-        after = len(self.collections[name])
-        return before - after
 
     # ------------------------------------------------------------------
     # 统计 & 日志

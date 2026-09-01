@@ -25,7 +25,7 @@ class RuleWriter:
         :param rules:       规则集合
         :param update_time: 更新时间字符串（格式 YYYY-MM-DD HH:MM:SS）
         """
-        self._dist_dir.mkdir(exist_ok=True)
+        self._dist_dir.mkdir(parents=True, exist_ok=True)
 
         sorted_rules = sorted(rules)
 
