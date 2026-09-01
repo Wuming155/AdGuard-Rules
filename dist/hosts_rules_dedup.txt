@@ -1,7 +1,7 @@
 # Title: Hosts Rules Dedup
 # Homepage: https://github.com/Wuming155/AdGuard-Rules
-# Total Rules: 10137
-# Last Update: 2026-08-31 14:37:02
+# Total Rules: 10152
+# Last Update: 2026-09-01 12:39:44
 #
 #
 
@@ -3142,8 +3142,12 @@
 0.0.0.0 api-p3.yksdks.com
 0.0.0.0 api-p4.mobsurl.com
 0.0.0.0 api-p4.yksdks.com
+0.0.0.0 api-secure.amplitude.com
+0.0.0.0 api-secure.eu.amplitude.com
 0.0.0.0 api-share.mob.com
 0.0.0.0 api-shoulei-ssl.xunlei.com
+0.0.0.0 api-sr.amplitude.com
+0.0.0.0 api-sr.eu.amplitude.com
 0.0.0.0 api-trace.kajicam.com
 0.0.0.0 api-user.dalyfeds.com
 0.0.0.0 api-v3.mentamob.com
@@ -3423,6 +3427,8 @@
 0.0.0.0 assets.gunosy.com
 0.0.0.0 assets.iredwhale.com
 0.0.0.0 assets.mailerlite.com
+0.0.0.0 assistant-api.amplitude.com
+0.0.0.0 assistant-api.eu.amplitude.com
 0.0.0.0 assistant.pandora.xiaomi.com
 0.0.0.0 assoc-amazon.cn
 0.0.0.0 assure360.actonservice.com
@@ -3930,6 +3936,7 @@
 0.0.0.0 cdn.districtm.io
 0.0.0.0 cdn.dsp.com
 0.0.0.0 cdn.earnify.com
+0.0.0.0 cdn.eu.amplitude.com
 0.0.0.0 cdn.fastclick.net
 0.0.0.0 cdn.flurry.com
 0.0.0.0 cdn.holmesmind.com
@@ -4792,6 +4799,8 @@
 0.0.0.0 encounter.bz.mgtv.com
 0.0.0.0 endeavorbusinessmedia.actonservice.com
 0.0.0.0 enduser.adsrvr.org
+0.0.0.0 engagement-static.amplitude.com
+0.0.0.0 engagement-static.eu.amplitude.com
 0.0.0.0 engine.adzerk.net
 0.0.0.0 engine.data.cnzz.com
 0.0.0.0 engine.tuia.cn
@@ -5131,6 +5140,8 @@
 0.0.0.0 growth-tracker.guazi.com
 0.0.0.0 growth.umeng.com
 0.0.0.0 growthmodemarketing.actonservice.com
+0.0.0.0 gs.amplitude.com
+0.0.0.0 gs.eu.amplitude.com
 0.0.0.0 gs.gepush.com
 0.0.0.0 gs.getui.com
 0.0.0.0 gs.getui.net
@@ -5810,6 +5821,8 @@
 0.0.0.0 la-match.taboola.com
 0.0.0.0 la-vid-events.taboola.com
 0.0.0.0 la-wf.taboola.com
+0.0.0.0 lab.amplitude.com
+0.0.0.0 lab.eu.amplitude.com
 0.0.0.0 labs.ra.icast.cn
 0.0.0.0 lammico.actonservice.com
 0.0.0.0 land3.postex10.com
@@ -7073,6 +7086,7 @@
 0.0.0.0 redlion.actonservice.com
 0.0.0.0 redthreadmarketing.actonservice.com
 0.0.0.0 redvector.actonservice.com
+0.0.0.0 regionconfig.eu.amplitude.com
 0.0.0.0 register.appsflyer.com
 0.0.0.0 rehmann.actonservice.com
 0.0.0.0 reico.actonservice.com
@@ -7786,6 +7800,7 @@
 0.0.0.0 sqm.df.telemetry.microsoft.com
 0.0.0.0 sqm.telemetry.microsoft.com
 0.0.0.0 sqsh.3g.qq.com
+0.0.0.0 sr-client-cfg.eu.amplitude.com
 0.0.0.0 sra-px.cdn-fileserver.com
 0.0.0.0 srch.atdmt.com
 0.0.0.0 sroomafp.allyes.com
