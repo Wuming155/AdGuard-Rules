@@ -50,7 +50,3 @@ class FileHandler:
     def update_readme(self, all_file_stats: list[dict]) -> None:
         """更新 README.md。"""
         self._stats_updater.update_readme(all_file_stats)
-
-    def update_whitelist_in_readme(self, whitelist_rules: set[str] | frozenset[str]) -> None:
-        """更新 README.md 中的白名单规则章节（统计表格 + 域名列表）。"""
-        self._stats_updater.update_whitelist_in_readme(whitelist_rules)
