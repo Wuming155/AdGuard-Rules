@@ -1,0 +1,8 @@
+# 项目依赖
+# 最低 Python 版本：3.10（使用 str | None、frozenset[str] 等新语法）
+
+# HTTP 请求库，用于拉取远程规则源
+requests>=2.31.0,<3.0.0
+
+# HTTP 连接池管理（requests 的底层依赖，显式声明以控制安全版本）
+urllib3>=1.26.18,<3.0.0

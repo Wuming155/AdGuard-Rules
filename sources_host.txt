@@ -1,0 +1,17 @@
+# 综合广告拦截 —— 多源互补，覆盖国内广告/跟踪/恶意域名
+https://raw.githubusercontent.com/2Gardon/SM-Ad-FuckU-hosts/refs/heads/master/SMAdHosts
+https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/refs/heads/main/Filters/AWAvenue-Ads-Rule-hosts.txt
+https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-domains.txt
+# blocklistproject 安全分类 —— 加密货币诈骗、毒品、勒索软件C2、诈骗、恶意重定向
+https://raw.githubusercontent.com/blocklistproject/Lists/master/crypto.txt
+https://raw.githubusercontent.com/blocklistproject/Lists/master/drugs.txt
+https://raw.githubusercontent.com/blocklistproject/Lists/master/ransomware.txt
+https://raw.githubusercontent.com/blocklistproject/Lists/master/scam.txt
+https://raw.githubusercontent.com/blocklistproject/Lists/master/redirect.txt
+# hagezi 厂商内置追踪器 —— 各品牌设备/系统遥测与行为分析域名
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.amazon-onlydomains.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.apple-onlydomains.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.huawei-onlydomains.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.samsung-onlydomains.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.tiktok-onlydomains.txt
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/native.xiaomi-onlydomains.txt

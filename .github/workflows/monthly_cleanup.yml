@@ -1,0 +1,43 @@
+name: Monthly Git History Cleanup
+
+on:
+  schedule:
+    # 每月第一天 UTC 02:00（中国 10:00）执行
+    - cron: '0 2 1 * *'
+  workflow_dispatch:
+    # 也支持手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 必须拉取全量历史才能清理
+
+      - name: Run History Cleanup Script
+        run: |
+          echo "=== 清理前状态 ==="
+          git rev-list --count HEAD
+          git count-objects -vH
+          echo ""
+
+          python tools/maintain_git_history.py --keep-months 1
+
+          echo ""
+          echo "=== 清理后状态 ==="
+          git rev-list --count HEAD
+          git count-objects -vH
+
+      - name: Push Cleaned History
+        run: |
+          git push origin main --force-with-lease
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "::warning::Git 历史清理失败，请手动检查"

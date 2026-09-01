@@ -1,0 +1,48 @@
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.src/__pycache__/
+
+# 分发目录（CI 自动生成）
+dist/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# Python 包构建
+*.egg-info/
+*.egg
+build/
+
+# IDE/编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.codebuddy/
+
+# 环境变量
+.env
+
+# 操作系统
+Thumbs.db
+.DS_Store
+
+# 日志
+*.log
+
+# 临时文件
+.tmp/
+# pytest 缓存
+.pytest_cache/
+
+# 本地测试输出
+test_err.txt
+test_output.txt
+
+
