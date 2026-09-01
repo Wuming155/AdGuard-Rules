@@ -1,6 +1,6 @@
 """China AdGuard Rules 模块 — 公开接口"""
 
-from .config import Config, PathConfig, RuleConfig, StatsConfig
+from .config import Config, PathConfig, RuleConfig
 from .rule_resolver import RuleResolver
 from .rule_store import RuleStore
 from .rule_fetcher import RuleFetcher
@@ -13,7 +13,7 @@ from .main import MainExecutor
 
 __all__ = [
     # 配置
-    'Config', 'PathConfig', 'RuleConfig', 'StatsConfig',
+    'Config', 'PathConfig', 'RuleConfig',
     # 核心
     'RuleResolver',
     'RuleStore',

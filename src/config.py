@@ -1,7 +1,7 @@
-"""配置管理模块 — 按职责拆分为路径、规则、统计三块专题配置"""
+"""配置管理模块 — 按职责拆分为路径、规则两块专题配置"""
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 # ---------------------------------------------------------------------------
@@ -34,17 +34,6 @@ class RuleConfig:
             raise ValueError("hosts_ip 不能为空，需设置为有效的 IP 地址（如 0.0.0.0）")
 
 
-@dataclass(frozen=True)
-class StatsConfig:
-    """README 统计相关配置"""
-    # README 规则统计排除的自定义规则文件列表
-    custom_exclude_files: frozenset[str] = field(default_factory=lambda: frozenset({
-        'custom_blocklist.txt',
-        'anti_whitelist.txt',
-        'custom_whitelist.txt',
-    }))
-
-
 # ---------------------------------------------------------------------------
 # 聚合 Config（向后兼容旧接口）
 # ---------------------------------------------------------------------------
@@ -62,7 +51,6 @@ class Config:
         # 子配置（不可变，按模块注入）
         self.path = PathConfig()
         self.rule = RuleConfig()
-        self.stats = StatsConfig()
 
     # --- 向后兼容的只读快捷属性 ---
 
@@ -89,7 +77,3 @@ class Config:
     @property
     def hosts_ip(self) -> str:
         return self.rule.hosts_ip
-
-    @property
-    def custom_exclude_files(self) -> frozenset[str]:
-        return self.stats.custom_exclude_files

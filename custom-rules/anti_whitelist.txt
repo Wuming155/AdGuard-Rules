@@ -1,4 +1,0 @@
-# 逆向白名单 - 用于移除包含以下域名的白名单规则
-# 这些域名相关的白名单规则将被阻止，不会生效
-local.adguard.org
-injections.adguard.org

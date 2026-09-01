@@ -29,14 +29,10 @@ class RuleWriter:
 
         sorted_rules = sorted(rules)
 
-        # Hosts / reject 域名文件使用 # 注释，其他用 ! 注释
-        comment_char = (
-            '#' if file_name.startswith(('hosts_', 'reject_')) else '!'
-        )
+        # Hosts 文件使用 # 注释，其他用 ! 注释
+        comment_char = '#' if file_name.startswith('hosts_') else '!'
 
         display_name = file_name.replace('_', ' ').title().replace('Adguard', 'AdGuard')
-        if file_name == 'reject_domains':
-            display_name = 'Reject Domains List'
 
         header = [
             f"{comment_char} Title: {display_name}",
@@ -45,17 +41,6 @@ class RuleWriter:
             f"{comment_char} Last Update: {update_time}",
             f"{comment_char}",
         ]
-
-        # reject_domains 特有：Mihomo/Clash rule-provider 配置示例
-        if file_name == 'reject_domains':
-            header.extend([
-                f"{comment_char} Mihomo/Clash rule-provider 配置示例:",
-                f"{comment_char}   - type: http",
-                f"{comment_char}     behavior: domain",
-                f"{comment_char}     url: https://raw.githubusercontent.com/{self._github_repo}/main/dist/{file_name}.txt",
-                f"{comment_char}     path: ./rules/{file_name}.txt",
-                f"{comment_char}     interval: 86400",
-            ])
 
         header.append(f"{comment_char}\n")
 

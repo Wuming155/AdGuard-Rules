@@ -72,9 +72,6 @@ class RuleFetcher:
             return
 
         for f in c_path.glob('*.txt'):
-            if f.name == 'anti_whitelist.txt':
-                continue  # 逆向白名单由 RuleProcessor 单独处理
-
             try:
                 skipped = 0
                 is_whitelist_file = (f.name == 'custom_whitelist.txt')
@@ -82,15 +79,22 @@ class RuleFetcher:
                     for line in fh:
                         stripped = line.strip()
 
-                        # 如果是白名单文件的纯域名行，自动包装为 @@||domain^ 格式
-                        if is_whitelist_file and stripped and not stripped.startswith(('#', '!', '@', '/')):
-                            if self._DOMAIN_PATTERN.match(stripped):
+                        if is_whitelist_file and stripped and not stripped.startswith(('!', '#')):
+                            # 白名单文件只接受域名或 @@ 开头的规则：
+                            # 纯域名行自动包装为 @@||domain^，
+                            # 其余无法识别的行直接跳过，避免被误判为黑名单
+                            if stripped.startswith('@@'):
+                                pass  # 原样解析
+                            elif self._DOMAIN_PATTERN.match(stripped):
                                 line = f'@@||{stripped}^'
+                            else:
+                                skipped += 1
+                                continue
 
                         rtype, rule = self._resolver.resolve(line)
                         if rtype:
                             self._store.add_rule(rtype, rule)
-                        elif line.strip() and not line.strip().startswith(('!', '#', '/')):
+                        elif stripped and not stripped.startswith(('!', '#', '/')):
                             skipped += 1
 
                 if skipped:
@@ -102,10 +106,6 @@ class RuleFetcher:
                 logger.error("读取 %s 时出错: %s", f.name, e)
 
     # ------------------------------------------------------------------
-    # 远程规则
-    # ------------------------------------------------------------------
-
-    # ------------------------------------------------------------------
     # Lite 规则类型映射
     # ------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ class RuleFetcher:
         mapping = {
             'hosts_rules': RuleStore.R_TYPE_HOSTS_LITE,
             'adguard_rules': RuleStore.R_TYPE_ADGUARD_LITE,
-            'whitelist': 'whitelist',  # 白名单全局共享
+            'whitelist': RuleStore.R_TYPE_WHITELIST,  # 白名单全局共享
         }
         return mapping.get(rtype)
 

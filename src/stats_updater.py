@@ -20,7 +20,6 @@ class StatsUpdater:
         'hosts_lite.txt': 'Hosts 格式精简版（仅广告过滤）',
         'adguard_lite.txt': 'AdGuard 格式精简版（仅广告过滤）',
         'hosts_lite_dedup.txt': '去重版精简 Hosts，可搭配 adguard_lite.txt 使用',
-        'reject_domains.txt': '域名拒绝列表（纯域名格式）',
     }
 
     def __init__(self, readme_path: str = 'README.md',

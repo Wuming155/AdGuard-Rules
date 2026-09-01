@@ -19,6 +19,11 @@ jobs:
         with:
           fetch-depth: 0  # 必须拉取全量历史才能清理
 
+      - name: Configure Git Identity
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
       - name: Run History Cleanup Script
         run: |
           echo "=== 清理前状态 ==="

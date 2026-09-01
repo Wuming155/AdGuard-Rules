@@ -1,9 +1,7 @@
 #屏蔽农业银行网络检测
 0.0.0.0 firefly.abchina.com.cn
-#vivo屏蔽安全中心广告
-||taobao.com^$app=com.vivo.safecenter
 #屏蔽vivo遥测
-||vcode-od.vivo.com.cn^$
+||vcode-od.vivo.com.cn^
 
 #屏蔽 AdGuard 内部注入域名
 ||local.adguard.org^

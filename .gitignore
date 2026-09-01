@@ -8,6 +8,9 @@ __pycache__/
 # 分发目录（CI 自动生成）
 dist/
 
+# 分析脚本缓存（本地运行时生成，体积较大不入库）
+analysis/cache/
+
 # 虚拟环境
 .venv/
 venv/

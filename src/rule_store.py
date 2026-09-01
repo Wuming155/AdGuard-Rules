@@ -22,9 +22,6 @@ class RuleStore:
     ALL_RULE_TYPES = frozenset({
         R_TYPE_HOSTS, R_TYPE_WHITELIST, R_TYPE_ADGUARD,
     })
-    ALL_LITE_RULE_TYPES = frozenset({
-        R_TYPE_HOSTS_LITE, R_TYPE_ADGUARD_LITE, R_TYPE_HOSTS_LITE_DEDUP,
-    })
 
     # ------------------------------------------------------------------
     # 初始化
@@ -40,13 +37,6 @@ class RuleStore:
             self.R_TYPE_ADGUARD_LITE: set(),
             self.R_TYPE_HOSTS_LITE_DEDUP: set(),
         }
-
-        # 逆向白名单内部状态（通过封装方法访问）
-        self._anti_whitelist_domains: set[str] = set()
-        self._anti_whitelist_pattern = None
-
-        # mihomo 规则集合
-        self._mihomo_rules: set[str] = set()
 
     # ------------------------------------------------------------------
     # 规则添加（统一入口）
@@ -92,7 +82,7 @@ class RuleStore:
         self.collections[name] = rules
 
     def remove_from_collection(self, name: str, predicate: callable) -> int:
-        """从集合中移除满足谓词的规则（面向未来扩展，当前 Pipeline 未使用）。
+        """从集合中移除满足谓词的规则。
 
         :param name:      集合名称
         :param predicate: 谓词函数 rule → bool（True 表示应移除）
@@ -107,57 +97,6 @@ class RuleStore:
         self.collections[name] = {r for r in target if not predicate(r)}
         after = len(self.collections[name])
         return before - after
-
-    # ------------------------------------------------------------------
-    # 逆向白名单（封装内部状态）
-    # ------------------------------------------------------------------
-
-    @property
-    def anti_whitelist_domains(self) -> frozenset[str]:
-        """逆向白名单域名集合（只读）。"""
-        return frozenset(self._anti_whitelist_domains)
-
-    @property
-    def anti_whitelist_pattern(self):
-        """逆向白名单预编译正则（可能为 None）。"""
-        return self._anti_whitelist_pattern
-
-    def set_anti_whitelist(self, domains: set[str], pattern) -> None:
-        """设置逆向白名单域名和预编译正则。
-
-        :param domains: 逆向白名单域名集合
-        :param pattern: 预编译的 re.Pattern 对象或 None
-        """
-        self._anti_whitelist_domains = set(domains)
-        self._anti_whitelist_pattern = pattern
-
-    @property
-    def anti_whitelist_count(self) -> int:
-        """逆向白名单域名数量。"""
-        return len(self._anti_whitelist_domains)
-
-    # ------------------------------------------------------------------
-    # Mihomo 规则
-    # ------------------------------------------------------------------
-
-    @property
-    def mihomo_rules(self) -> frozenset[str]:
-        """mihomo 规则集合（只读快照）。"""
-        return frozenset(self._mihomo_rules)
-
-    def replace_mihomo_rules(self, domains: set[str]) -> None:
-        """全量替换 mihomo 规则集合（先清空再批量写入）。
-
-        写入纯域名格式，配合 Mihomo/Clash rule-provider 的 behavior: domain 使用。
-        """
-        self._mihomo_rules.clear()
-        for domain in sorted(domains):
-            self._mihomo_rules.add(domain)
-
-    @property
-    def mihomo_count(self) -> int:
-        """mihomo 规则数量。"""
-        return len(self._mihomo_rules)
 
     # ------------------------------------------------------------------
     # 统计 & 日志

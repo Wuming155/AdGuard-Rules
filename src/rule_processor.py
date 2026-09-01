@@ -1,4 +1,4 @@
-"""规则处理器模块 — 逆向白名单处理、Hosts 清洗及 mihomo 规则生成"""
+"""规则处理器模块 — 白名单清洗及 Hosts 规则去重"""
 
 import re
 import logging
@@ -22,6 +22,16 @@ class RuleProcessor:
         '#$#', '#@$#', '#$?#', '#@$?#',
         '#%#', '#@%#',
     })
+
+    # 合法域名（用于判定规则主体是否为纯域名）
+    _DOMAIN_RE = re.compile(
+        r'^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$'
+    )
+
+    # 不改变"拦截整个域名"语义的修饰符。
+    # 除此之外的修饰符（$third-party / $image / $removeparam / $app 等）
+    # 都把规则收缩为 URL 级或条件级，不能当成整域覆盖。
+    _NEUTRAL_MODIFIERS = frozenset({'important'})
 
     def __init__(self, rule_store: RuleStore, path_config: PathConfig = None):
         """
@@ -70,186 +80,156 @@ class RuleProcessor:
 
         return s.lower()
 
-    # ------------------------------------------------------------------
-    # 逆向白名单
-    # ------------------------------------------------------------------
+    @classmethod
+    def extract_blocking_domain(cls, rule: str) -> str | None:
+        """提取『被整域拦截』的域名，仅当规则覆盖整个域名时返回域名。
 
-    def read_anti_whitelist(self) -> None:
-        """读取逆向白名单文件，构建域名集合和预编译正则。"""
-        anti_path = Path(self._path_config.custom_rules_dir) / 'anti_whitelist.txt'
-        if not anti_path.exists():
-            logger.info("逆向白名单文件不存在，跳过: %s", anti_path)
-            return
+        与 extract_domain() 的区别：extract_domain() 是宽松提取，用于判断
+        某条规则"归属于"哪个域名；本方法是严格判定，用于判断某域名是否
+        已被完整覆盖。以下情况返回 None，避免把 URL 级规则误当成整域拦截：
 
-        domains: set[str] = set()
-        try:
-            with open(anti_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith('#') and not line.startswith('!'):
-                        domains.add(line)
-        except (OSError, UnicodeDecodeError) as e:
-            logger.error("读取逆向白名单失败: %s — %s", anti_path, e)
-            return
+            ||a.com/ads.js              — 仅拦截特定路径
+            ||a.com^$third-party        — 仅拦截第三方请求
+            ||a.com^$removeparam=utm    — 非拦截语义，仅清理参数
+            ||a.com^$app=com.xxx        — 仅在指定 App 内生效（DNS 层不支持）
+            ||a.com^$badfilter          — 规则已被显式禁用
+            a.com##.ad / *-ad.a.com*    — 修饰类与通配符规则
 
-        if domains:
-            combined = '|'.join(
-                r'(?:(?:^|[.\#])' + re.escape(d) + r'(?=$|[.\#^/]))'
-                for d in domains
-            )
-            pattern = re.compile(combined)
-            self._store.set_anti_whitelist(domains, pattern)
+        :param rule: 原始规则字符串
+        :returns: 被整域拦截的小写域名，非整域拦截时返回 None
+        """
+        s = rule.strip()
+
+        # 白名单与修饰类规则不构成拦截
+        if s.startswith('@@'):
+            return None
+        if any(m in s for m in cls._COSMETIC_MARKERS):
+            return None
+
+        # 只有 || 开头的规则才表示"域名锚定"
+        if s.startswith('||'):
+            s = s[2:]
+        elif s.startswith(('http://', 'https://')):
+            s = s.split('://', 1)[1]
         else:
-            self._store.set_anti_whitelist(set(), None)
+            return None
 
-        logger.info("成功读取逆向白名单，共 %d 个域名", self._store.anti_whitelist_count)
+        # 拆分修饰符：仅允许中性修饰符，其余一律视为条件拦截
+        body, sep, modifiers = s.partition('$')
+        if sep:
+            mods = {m.split('=', 1)[0].strip() for m in modifiers.split(',')}
+            if not mods or not mods <= cls._NEUTRAL_MODIFIERS:
+                return None
 
-    def remove_anti_whitelist_rules(self) -> None:
-        """从白名单集合中移除匹配逆向白名单域名的规则。"""
-        pattern = self._store.anti_whitelist_pattern
-        domains = self._store.anti_whitelist_domains
+        # 主体必须是纯域名（允许可选的分隔符 ^）
+        if body.endswith('^'):
+            body = body[:-1]
+        if not body or not cls._DOMAIN_RE.match(body):
+            return None
 
-        if not domains or not pattern:
-            return
+        # 排除纯 IPv4 地址（域名级集合不应包含 IP）
+        if body.count('.') == 3 and all(p.isdigit() for p in body.split('.')):
+            return None
 
-        logger.info("移除逆向白名单规则...")
-        name = RuleStore.R_TYPE_WHITELIST
-        before = self._store.get_collection_size(name)
-
-        existing = self._store.get_collection(name)
-        filtered = {rule for rule in existing if not pattern.search(rule)}
-        self._store.replace_collection(name, filtered)
-
-        after = self._store.get_collection_size(name)
-        logger.info("已移除 %d 条逆向白名单规则", before - after)
+        return body.lower()
 
     # ------------------------------------------------------------------
     # Hosts 白名单清洗
     # ------------------------------------------------------------------
 
-    def remove_whitelist_from_hosts(self) -> None:
-        """将白名单域名从 hosts_rules 中移除。"""
-        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
-        if not whitelist:
-            return
+    def _collect_whitelist_domains(self, warn_label: str = '') -> set[str]:
+        """提取白名单规则中的域名集合。
 
-        logger.info("从 Hosts 规则中移除白名单域名...")
-
+        :param warn_label: 非空时，对含通配符而无法提取域名的规则输出告警，
+                           并使用该文案作为告警中的目标集合名称。
+        :returns: 白名单域名集合
+        """
         whitelist_domains: set[str] = set()
         skipped_wildcards: list[str] = []
-        for rule in whitelist:
+
+        for rule in self._store.get_collection(RuleStore.R_TYPE_WHITELIST):
             domain = self.extract_domain(rule)
             if domain:
                 whitelist_domains.add(domain)
             elif any(c in rule for c in ('*', '?')):
                 skipped_wildcards.append(rule)
 
-        if skipped_wildcards:
+        if skipped_wildcards and warn_label:
             display = ', '.join(skipped_wildcards[:5])
             suffix = '...' if len(skipped_wildcards) > 5 else ''
             logger.warning(
-                "%d 条包含通配符的白名单规则无法从 Hosts 中移除: %s%s",
-                len(skipped_wildcards), display, suffix,
+                "%d 条包含通配符的白名单规则无法从 %s 中移除: %s%s",
+                len(skipped_wildcards), warn_label, display, suffix,
             )
+
+        return whitelist_domains
+
+    @staticmethod
+    def _covers(domain: str, base_domains: set[str]) -> bool:
+        """判断 domain 是否等于或隶属于 base_domains 中的任一域名。"""
+        return domain in base_domains or any(
+            domain.endswith('.' + wd) for wd in base_domains
+        )
+
+    def _remove_whitelisted_hosts(self, rtype: str, label: str) -> None:
+        """从 Hosts 类集合中移除白名单域名（含其子域名）。
+
+        :param rtype: 目标集合名称
+        :param label: 集合显示名（用于日志）
+        """
+        if not self._store.get_collection_size(RuleStore.R_TYPE_WHITELIST):
+            return
+
+        logger.info("从 %s 规则中移除白名单域名...", label)
+        whitelist_domains = self._collect_whitelist_domains(warn_label=label)
+        if not whitelist_domains:
+            return
 
         def _is_whitelisted(rule: str) -> bool:
             parts = rule.split()
             if len(parts) < 2:
                 return False
-            target_domain = parts[1].lower()
-            return target_domain in whitelist_domains or any(
-                target_domain.endswith('.' + wd) for wd in whitelist_domains
-            )
+            return self._covers(parts[1].lower(), whitelist_domains)
 
-        removed = self._store.remove_from_collection(
-            RuleStore.R_TYPE_HOSTS, _is_whitelisted,
-        )
-        logger.info("已从 Hosts 规则中移除 %d 条白名单域名", removed)
+        removed = self._store.remove_from_collection(rtype, _is_whitelisted)
+        logger.info("已从 %s 规则中移除 %d 条白名单域名", label, removed)
 
-    # ------------------------------------------------------------------
-    # AdGuard 白名单清洗（去掉白名单对应的黑名单规则）
-    # ------------------------------------------------------------------
+    def _remove_whitelisted_adguard(self, rtype: str, label: str) -> None:
+        """从 AdGuard 类集合中移除白名单域名（含其子域名）。
 
-    def remove_whitelist_from_adguard(self) -> None:
-        """将白名单域名从 adguard_rules 中移除。"""
-        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
-        if not whitelist:
+        :param rtype: 目标集合名称
+        :param label: 集合显示名（用于日志）
+        """
+        if not self._store.get_collection_size(RuleStore.R_TYPE_WHITELIST):
             return
 
-        logger.info("从 AdGuard 规则中移除白名单域名...")
-
-        # 提取白名单域名
-        whitelist_domains: set[str] = set()
-        for rule in whitelist:
-            domain = self.extract_domain(rule)
-            if domain:
-                whitelist_domains.add(domain)
-
+        logger.info("从 %s 规则中移除白名单域名...", label)
+        whitelist_domains = self._collect_whitelist_domains()
         if not whitelist_domains:
             return
 
-        # 过滤 adguard_rules：去掉域名在白名单中的规则
         def _is_whitelisted(rule: str) -> bool:
             domain = self.extract_domain(rule)
-            return domain is not None and (
-                domain in whitelist_domains
-                or any(domain.endswith('.' + wd) for wd in whitelist_domains)
-            )
+            return domain is not None and self._covers(domain, whitelist_domains)
 
-        removed = self._store.remove_from_collection(
-            RuleStore.R_TYPE_ADGUARD, _is_whitelisted,
-        )
-        logger.info("已从 AdGuard 规则中移除 %d 条白名单域名", removed)
+        removed = self._store.remove_from_collection(rtype, _is_whitelisted)
+        logger.info("已从 %s 规则中移除 %d 条白名单域名", label, removed)
 
-    # ------------------------------------------------------------------
-    # Mihomo 规则生成
-    # ------------------------------------------------------------------
+    def remove_whitelist_from_hosts(self) -> None:
+        """将白名单域名从 hosts_rules 中移除。"""
+        self._remove_whitelisted_hosts(RuleStore.R_TYPE_HOSTS, 'Hosts')
 
-    def generate_mihomo_rules(self) -> None:
-        """从 hosts_rules + adguard_rules 提取域名，生成 mihomo 规则。"""
-        logger.info("生成 mihomo 规则...")
-        domains: set[str] = set()
+    def remove_whitelist_from_adguard(self) -> None:
+        """将白名单域名从 adguard_rules 中移除。"""
+        self._remove_whitelisted_adguard(RuleStore.R_TYPE_ADGUARD, 'AdGuard')
 
-        # 1. 从 hosts_rules 提取
-        for rule in self._store.get_collection(RuleStore.R_TYPE_HOSTS):
-            parts = rule.split()
-            if len(parts) >= 2:
-                domain = parts[1].lower()
-                if domain and '.' in domain and all(c.isalnum() or c in '.-' for c in domain):
-                    domains.add(domain)
+    def remove_whitelist_from_hosts_lite(self) -> None:
+        """将白名单域名从 hosts_lite 中移除。"""
+        self._remove_whitelisted_hosts(RuleStore.R_TYPE_HOSTS_LITE, 'Lite Hosts')
 
-        # 2. 从 adguard_rules 提取（跳过 CSS/JS 注入类规则，它们不应转为域名级拦截）
-        for rule in self._store.get_collection(RuleStore.R_TYPE_ADGUARD):
-            if any(m in rule for m in self._COSMETIC_MARKERS):
-                continue
-            domain = self.extract_domain(rule)
-            if domain:
-                domains.add(domain)
-
-        # 3. 移除逆向白名单域名
-        anti = self._store.anti_whitelist_domains
-        if anti:
-            domains -= anti
-
-        # 4. 移除白名单域名（含子域名匹配）
-        whitelist_domains_for_mihomo = set()
-        for rule in self._store.get_collection(RuleStore.R_TYPE_WHITELIST):
-            domain = self.extract_domain(rule)
-            if domain:
-                whitelist_domains_for_mihomo.add(domain)
-
-        if whitelist_domains_for_mihomo:
-            to_remove = set()
-            for d in domains:
-                if d in whitelist_domains_for_mihomo or any(
-                    d.endswith('.' + wd) for wd in whitelist_domains_for_mihomo
-                ):
-                    to_remove.add(d)
-            domains -= to_remove
-
-        # 5. 全量替换写入 Store
-        self._store.replace_mihomo_rules(domains)
-        logger.info("mihomo 拦截规则: %d 条", self._store.mihomo_count)
+    def remove_whitelist_from_adguard_lite(self) -> None:
+        """将白名单域名从 adguard_lite 中移除。"""
+        self._remove_whitelisted_adguard(RuleStore.R_TYPE_ADGUARD_LITE, 'Lite AdGuard')
 
     # ------------------------------------------------------------------
     # Hosts 规则去重（去掉已被 AdGuard 覆盖的域名）
@@ -259,10 +239,12 @@ class RuleProcessor:
         """从 hosts_rules 中去掉 adguard_rules 已覆盖的域名（AdGuard 覆盖范围更大）。"""
         logger.info("生成去重 Hosts 规则...")
 
-        # 1. 构建 adguard_rules 域名集合
+        # 1. 构建 adguard_rules 整域拦截域名集合
+        #    （仅 ||domain^ 形式才算覆盖整域；带路径/修饰符的规则不算，
+        #     否则会把 hosts 中仍需整域拦截的条目误删，造成漏拦）
         adguard_domains: set[str] = set()
         for rule in self._store.get_collection(RuleStore.R_TYPE_ADGUARD):
-            domain = self.extract_domain(rule)
+            domain = self.extract_blocking_domain(rule)
             if domain:
                 adguard_domains.add(domain)
 
@@ -290,78 +272,6 @@ class RuleProcessor:
         )
 
     # ------------------------------------------------------------------
-    # Lite 版白名单清洗
-    # ------------------------------------------------------------------
-
-    def remove_whitelist_from_hosts_lite(self) -> None:
-        """将白名单域名从 hosts_lite 中移除。"""
-        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
-        if not whitelist:
-            return
-
-        logger.info("从 Lite Hosts 规则中移除白名单域名...")
-
-        whitelist_domains: set[str] = set()
-        skipped_wildcards: list[str] = []
-        for rule in whitelist:
-            domain = self.extract_domain(rule)
-            if domain:
-                whitelist_domains.add(domain)
-            elif any(c in rule for c in ('*', '?')):
-                skipped_wildcards.append(rule)
-
-        if skipped_wildcards:
-            display = ', '.join(skipped_wildcards[:5])
-            suffix = '...' if len(skipped_wildcards) > 5 else ''
-            logger.warning(
-                "%d 条包含通配符的白名单规则无法从 Lite Hosts 中移除: %s%s",
-                len(skipped_wildcards), display, suffix,
-            )
-
-        def _is_whitelisted(rule: str) -> bool:
-            parts = rule.split()
-            if len(parts) < 2:
-                return False
-            target_domain = parts[1].lower()
-            return target_domain in whitelist_domains or any(
-                target_domain.endswith('.' + wd) for wd in whitelist_domains
-            )
-
-        removed = self._store.remove_from_collection(
-            RuleStore.R_TYPE_HOSTS_LITE, _is_whitelisted,
-        )
-        logger.info("已从 Lite Hosts 规则中移除 %d 条白名单域名", removed)
-
-    def remove_whitelist_from_adguard_lite(self) -> None:
-        """将白名单域名从 adguard_lite 中移除。"""
-        whitelist = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
-        if not whitelist:
-            return
-
-        logger.info("从 Lite AdGuard 规则中移除白名单域名...")
-
-        whitelist_domains: set[str] = set()
-        for rule in whitelist:
-            domain = self.extract_domain(rule)
-            if domain:
-                whitelist_domains.add(domain)
-
-        if not whitelist_domains:
-            return
-
-        def _is_whitelisted(rule: str) -> bool:
-            domain = self.extract_domain(rule)
-            return domain is not None and (
-                domain in whitelist_domains
-                or any(domain.endswith('.' + wd) for wd in whitelist_domains)
-            )
-
-        removed = self._store.remove_from_collection(
-            RuleStore.R_TYPE_ADGUARD_LITE, _is_whitelisted,
-        )
-        logger.info("已从 Lite AdGuard 规则中移除 %d 条白名单域名", removed)
-
-    # ------------------------------------------------------------------
     # Lite Hosts 规则去重（去掉已被 Lite AdGuard 覆盖的域名）
     # ------------------------------------------------------------------
 
@@ -369,10 +279,10 @@ class RuleProcessor:
         """从 hosts_lite 中去掉 adguard_lite 已覆盖的域名。"""
         logger.info("生成去重 Lite Hosts 规则...")
 
-        # 1. 构建 adguard_lite 域名集合
+        # 1. 构建 adguard_lite 整域拦截域名集合（仅 ||domain^ 形式才算覆盖整域）
         adguard_domains: set[str] = set()
         for rule in self._store.get_collection(RuleStore.R_TYPE_ADGUARD_LITE):
-            domain = self.extract_domain(rule)
+            domain = self.extract_blocking_domain(rule)
             if domain:
                 adguard_domains.add(domain)
 

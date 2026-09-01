@@ -15,6 +15,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 推送自动生成的规则文件需要写权限
     env:
       TZ: Asia/Shanghai
     steps:
@@ -41,9 +43,9 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
+          # dist/ 为本地生成产物，已被 .gitignore 忽略，不再入库同步；
+          # 仅提交 README 统计、custom-rules 等被跟踪文件的变更
           git add .
-          # 强制添加 dist/ 下的新文件（mihomo_rules.txt 等首次出现时会被 gitignore 屏蔽）
-          git add -f dist/
           
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Auto Update Stats: $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S')"
@@ -53,8 +55,8 @@ jobs:
             if git pull --rebase origin main; then
               git push origin main
             else
-              git rebase --abort
-              echo "Rebase 冲突，以本地结果为基准进行推送"
+              echo "::warning::Rebase 失败，尝试中止后以本地结果强制推送"
+              git rebase --abort 2>/dev/null || true
               git push --force-with-lease origin main
             fi
           else

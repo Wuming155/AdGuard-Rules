@@ -183,15 +183,20 @@ def main() -> None:
 
     # 3. 在 new_root_id 上重放保留的提交
     logger.info("步骤 3/5: 重放 %s 个保留提交...", new_count)
-    run_git("rebase", "--onto", new_root_id, old_tail, cwd=repo_root)
-
-    # 检测 rebase 是否产生冲突
-    rebase_conflict = run_git("status", "--porcelain", cwd=repo_root)
-    if rebase_conflict:
-        logger.error("Rebase 发生冲突，存在未处理的文件:")
-        for line in rebase_conflict.splitlines():
-            logger.error("  %s", line)
-        logger.error("请手动解决冲突后再运行。")
+    try:
+        run_git("rebase", "--onto", new_root_id, old_tail, cwd=repo_root)
+    except SystemExit:
+        # run_git 失败时会直接 sys.exit，在此捕获以便回滚现场
+        logger.error("Rebase 失败（可能存在冲突），正在中止并恢复原分支...")
+        subprocess.run(
+            ["git", "rebase", "--abort"],
+            cwd=repo_root, capture_output=True, text=True,
+        )
+        subprocess.run(
+            ["git", "branch", "-D", "__cleanup_temp__"],
+            cwd=repo_root, capture_output=True, text=True,
+        )
+        logger.error("已恢复到 rebase 前状态，请手动检查后重试。")
         sys.exit(1)
     logger.info("  Rebase 完成")
 

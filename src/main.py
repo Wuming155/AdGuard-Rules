@@ -67,23 +67,8 @@ class ReadRemoteRulesStep(PipelineStep):
         self._fetcher.read_remote_rules()
 
 
-class ProcessAntiWhitelistStep(PipelineStep):
-    """步骤 3：逆向白名单处理（读取 + 移除）"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "逆向白名单处理"
-
-    def execute(self) -> None:
-        self._processor.read_anti_whitelist()
-        self._processor.remove_anti_whitelist_rules()
-
-
 class PrintSummaryStep(PipelineStep):
-    """步骤 4：打印规则概况"""
+    """步骤 3：打印规则概况"""
 
     def __init__(self, rule_store: RuleStore):
         self._store = rule_store
@@ -97,7 +82,7 @@ class PrintSummaryStep(PipelineStep):
 
 
 class RemoveWhitelistFromHostsStep(PipelineStep):
-    """步骤 5：从 Hosts 规则中移除白名单域名（必须在 mihomo 生成前）"""
+    """步骤 4：从 Hosts 规则中移除白名单域名（必须在去重生成前）"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -111,7 +96,7 @@ class RemoveWhitelistFromHostsStep(PipelineStep):
 
 
 class RemoveWhitelistFromAdguardStep(PipelineStep):
-    """步骤 6：从 AdGuard 规则中移除白名单域名"""
+    """步骤 5：从 AdGuard 规则中移除白名单域名"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -124,22 +109,8 @@ class RemoveWhitelistFromAdguardStep(PipelineStep):
         self._processor.remove_whitelist_from_adguard()
 
 
-class GenerateMihomoRulesStep(PipelineStep):
-    """步骤 7：生成 mihomo 规则"""
-
-    def __init__(self, rule_processor: RuleProcessor):
-        self._processor = rule_processor
-
-    @property
-    def name(self) -> str:
-        return "生成 Mihomo 规则"
-
-    def execute(self) -> None:
-        self._processor.generate_mihomo_rules()
-
-
 class GenerateDedupHostsStep(PipelineStep):
-    """步骤 8：生成去重 Hosts 规则（去掉 AdGuard 已覆盖的域名）"""
+    """步骤 6：生成去重 Hosts 规则（去掉 AdGuard 已覆盖的域名）"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -153,7 +124,7 @@ class GenerateDedupHostsStep(PipelineStep):
 
 
 class RemoveWhitelistFromHostsLiteStep(PipelineStep):
-    """步骤 9：从 Lite Hosts 规则中移除白名单域名"""
+    """步骤 7：从 Lite Hosts 规则中移除白名单域名"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -167,7 +138,7 @@ class RemoveWhitelistFromHostsLiteStep(PipelineStep):
 
 
 class RemoveWhitelistFromAdguardLiteStep(PipelineStep):
-    """步骤 10：从 Lite AdGuard 规则中移除白名单域名"""
+    """步骤 8：从 Lite AdGuard 规则中移除白名单域名"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -181,7 +152,7 @@ class RemoveWhitelistFromAdguardLiteStep(PipelineStep):
 
 
 class GenerateDedupHostsLiteStep(PipelineStep):
-    """步骤 11：生成去重 Lite Hosts 规则（去掉 Lite AdGuard 已覆盖的域名）"""
+    """步骤 9：生成去重 Lite Hosts 规则（去掉 Lite AdGuard 已覆盖的域名）"""
 
     def __init__(self, rule_processor: RuleProcessor):
         self._processor = rule_processor
@@ -195,7 +166,7 @@ class GenerateDedupHostsLiteStep(PipelineStep):
 
 
 class WriteRulesStep(PipelineStep):
-    """步骤 12：将规则集合写入文件"""
+    """步骤 10：将规则集合写入文件"""
 
     def __init__(self, file_handler: FileHandler, rule_store: RuleStore):
         self._fh = file_handler
@@ -227,12 +198,9 @@ class WriteRulesStep(PipelineStep):
         hosts_lite_dedup = self._store.get_collection(RuleStore.R_TYPE_HOSTS_LITE_DEDUP)
         self._fh.write_rules_file(RuleStore.R_TYPE_HOSTS_LITE_DEDUP, set(hosts_lite_dedup), update_time)
 
-        # mihomo 规则单独写出
-        self._fh.write_rules_file('reject_domains', self._store.mihomo_rules, update_time)
-
 
 class UpdateStatsStep(PipelineStep):
-    """步骤 10：更新 README 统计"""
+    """步骤 11：更新 README 统计"""
 
     def __init__(self, file_handler: FileHandler, config: Config):
         self._fh = file_handler
@@ -243,13 +211,7 @@ class UpdateStatsStep(PipelineStep):
         return "更新 README 统计"
 
     def execute(self) -> None:
-        all_stats = (
-            self._fh.get_file_stats(
-                self._config.custom_rules_dir,
-                exclude_files=self._config.custom_exclude_files,
-            )
-            + self._fh.get_file_stats(self._config.dist_dir)
-        )
+        all_stats = self._fh.get_file_stats(self._config.dist_dir)
         # 过滤掉不需要展示的文件（白名单已内嵌到规则中，不单独列出）
         all_stats = [s for s in all_stats if s['name'] not in ('whitelist.txt',)]
         self._fh.update_readme(all_stats)
@@ -312,17 +274,13 @@ class MainExecutor:
             ReadLocalRulesStep(self.rule_fetcher),
             ReadRemoteRulesStep(self.rule_fetcher),
 
-            # 逆向白名单必须在规则全部加载后、写入前执行
-            ProcessAntiWhitelistStep(self.rule_processor),
-
             PrintSummaryStep(self.rule_store),
 
-            # 白名单清洗必须在 mihomo 和去重生成前执行
+            # 白名单清洗必须在去重生成前执行
             RemoveWhitelistFromHostsStep(self.rule_processor),
             RemoveWhitelistFromAdguardStep(self.rule_processor),
-            GenerateMihomoRulesStep(self.rule_processor),
 
-            # Hosts 去重必须在白名单清洗和 mihomo 生成之后、写入之前
+            # Hosts 去重必须在白名单清洗之后、写入之前
             GenerateDedupHostsStep(self.rule_processor),
 
             # Lite 版规则处理
@@ -361,3 +319,4 @@ class MainExecutor:
 
         except Exception:
             logger.critical("执行过程中出错: %s", traceback.format_exc())
+            raise  # 重新抛出，保证进程以非零退出码结束，让 CI 能感知失败
