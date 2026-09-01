@@ -144,87 +144,19 @@ class StatsUpdater:
                 # 用 lambda 传入替换文本，避免内容中的反斜杠被当作正则替换模板解析
                 new_content = re.sub(pattern, lambda _m: new_section,
                                      content, count=1, flags=re.MULTILINE)
-                self._readme_path.write_text(new_content, encoding='utf-8')
-                logger.info("README 统计已更新，时间: %s", now)
             else:
                 section = f"\n## 规则统计\n\n{table_content}\n"
                 new_content = content + section
-                self._readme_path.write_text(new_content, encoding='utf-8')
                 logger.info("README 中未找到'规则统计'章节，已在末尾自动添加。时间: %s", now)
-        except OSError as e:
-            logger.error("写入 README 失败: %s", e)
 
-    # ------------------------------------------------------------------
-    # 白名单规则展示
-    # ------------------------------------------------------------------
+            # 白名单已并入『规则统计』表格，清理旧版独立的『白名单规则』章节
+            new_content = re.sub(
+                r"^##\s*.*白名单规则[\s\S]*?(?=^##\s|\Z)",
+                '', new_content, count=1, flags=re.MULTILINE,
+            )
+            new_content = re.sub(r'\n{3,}', '\n\n', new_content).rstrip() + '\n'
 
-    @staticmethod
-    def _extract_whitelist_domain(rule: str) -> str | None:
-        """从白名单规则（如 @@||domain^）中提取纯小写域名。"""
-        s = rule.strip()
-        if s.startswith('@@'):
-            s = s[2:]
-        if s.startswith('||'):
-            s = s[2:]
-        for ch in ('^', '$', '/', '#'):
-            idx = s.find(ch)
-            if idx != -1:
-                s = s[:idx]
-        s = s.lstrip('*').lstrip('.')
-        if '.' in s and ' ' not in s:
-            return s.lower()
-        return None
-
-    def update_whitelist_in_readme(self, whitelist_rules: set[str] | frozenset[str]) -> None:
-        """更新 README『白名单规则』章节：一张统计表格 + 可折叠的域名列表。
-
-        与『规则统计』章节保持同一风格，不展开分类与说明文字。
-        """
-        if not self._readme_path.exists():
-            logger.warning("README 文件不存在: %s", self._readme_path)
-            return
-
-        domains = sorted({
-            d for d in (self._extract_whitelist_domain(r) for r in whitelist_rules) if d
-        })
-        if not domains:
-            logger.warning("白名单为空，跳过更新 README")
-            return
-
-        total = len(domains)
-        desc = self._RULE_DESCRIPTIONS.get('whitelist.txt', '')
-        lines: list[str] = [
-            "| 规则文件 | 说明 | 规则数量 | 下载链接 |",
-            "| :--- | :--- | :--- | :--- |",
-            f"| whitelist.txt | {desc} | {total} | "
-            f"[点击下载]({self._download_base}/whitelist.txt) |",
-            "",
-            "<details>",
-            f"<summary>展开查看全部 {total} 条白名单域名</summary>",
-            "",
-        ]
-        lines.extend(f"- `{d}`" for d in domains)
-        lines.extend(["", "</details>"])
-        section_body = "\n".join(lines)
-
-        try:
-            content = self._readme_path.read_text(encoding='utf-8')
-        except (OSError, UnicodeDecodeError) as e:
-            logger.error("读取 README 失败: %s", e)
-            return
-
-        pattern = r"^(##\s*.*白名单规则[\s\S]*?)(?=^##\s|\Z)"
-        match = re.search(pattern, content, flags=re.MULTILINE)
-        try:
-            if match:
-                title_line = match.group(1).splitlines()[0]
-                new_section = f"{title_line}\n\n{section_body}\n"
-                new_content = re.sub(pattern, lambda _m: new_section,
-                                     content, count=1, flags=re.MULTILINE)
-                logger.info("README 白名单章节已更新，共 %d 条", total)
-            else:
-                new_content = content.rstrip() + f"\n\n## 白名单规则\n\n{section_body}\n"
-                logger.info("README 中未找到'白名单规则'章节，已在末尾自动添加，共 %d 条", total)
             self._readme_path.write_text(new_content, encoding='utf-8')
+            logger.info("README 统计已更新，时间: %s", now)
         except OSError as e:
             logger.error("写入 README 失败: %s", e)

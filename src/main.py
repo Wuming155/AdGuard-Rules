@@ -144,18 +144,11 @@ class UpdateStatsStep(PipelineStep):
         all_stats = self._fh.get_file_stats(self._config.dist_dir)
 
         # 只统计本次实际产出的文件，避免 dist/ 中的历史残留混入表格。
-        # whitelist.txt 已在独立章节展示，不重复列入统计表格。
-        expected_names = {
-            f"{rtype}.txt"
-            for rtype in RuleStore.OUTPUT_RULE_TYPES
-            if rtype != RuleStore.R_TYPE_WHITELIST
-        }
+        # 白名单与拦截规则在同一张表格中展示。
+        expected_names = {f"{rtype}.txt" for rtype in RuleStore.OUTPUT_RULE_TYPES}
         all_stats = [s for s in all_stats if s['name'] in expected_names]
 
         self._fh.update_readme(all_stats)
-        # 将生效白名单规则（含远程源提取）展示到 README（随定时任务自动更新）
-        whitelist_rules = self._store.get_collection(RuleStore.R_TYPE_WHITELIST)
-        self._fh.update_whitelist_in_readme(whitelist_rules)
 
 
 # ======================================================================
