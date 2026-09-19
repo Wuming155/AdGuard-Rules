@@ -1,158 +1,146 @@
+# AdGuard DNS 规则（||域名^ 格式，全部统一为DNS阻塞规则）
 #屏蔽农业银行网络检测
-0.0.0.0 firefly.abchina.com.cn
+||firefly.abchina.com.cn^
 #屏蔽vivo遥测
 ||vcode-od.vivo.com.cn^
-
 #屏蔽 AdGuard 内部注入域名
 ||local.adguard.org^
 #运营商相关屏蔽
-0.0.0.0 auth.wosms.cn
-0.0.0.0 config.cmpassport.com
-0.0.0.0 enrichgw.10010.com
-0.0.0.0 hmrz.wo.cn
-0.0.0.0 id.mail.wo.cn
-0.0.0.0 id6.me
-0.0.0.0 log.cmpassport.com
-0.0.0.0 log1.cmpassport.com
-0.0.0.0 mdn.open.wo.cn
-0.0.0.0 mob.com
-0.0.0.0 nishub1.10010.com
-0.0.0.0 opencloud.wostore.cn
-0.0.0.0 ye.dun.163yun.com
-
-
+||auth.wosms.cn^
+||config.cmpassport.com^
+||enrichgw.10010.com^
+||hmrz.wo.cn^
+||id.mail.wo.cn^
+||id6.me^
+||log.cmpassport.com^
+||log1.cmpassport.com^
+||mdn.open.wo.cn^
+||mob.com^
+||nishub1.10010.com^
+||opencloud.wostore.cn^
+||ye.dun.163yun.com^
 #P2P/CDN 相关屏蔽
-0.0.0.0 bsccdn.net
-0.0.0.0 dyp2p-ali.douyucdn.cn
-0.0.0.0 dyp2p-hw.douyucdn.cn
-0.0.0.0 ietheivaicai.com
-0.0.0.0 kuiniuca.com
-0.0.0.0 nexusedgeio.com
-0.0.0.0 onethingpcs.com
-0.0.0.0 p2p-ali.douyucdn.cn
-0.0.0.0 p2p.huya.com
-0.0.0.0 p2p.qq.com
-0.0.0.0 p2pchunk-hw.douyucdn.cn
-0.0.0.0 p2pchunk-table.douyucdn.cn
-0.0.0.0 p2pchunk-ws.douyucdn.cn
-0.0.0.0 p2perrorlog.douyucdn.cn
-0.0.0.0 p2plive-ali.douyucdn.cn
-0.0.0.0 p2plive-ws.douyucdn.cn
-0.0.0.0 p2plog.douyucdn.cn
-0.0.0.0 p2ptun.qq.com
-0.0.0.0 p2pupdate.gamedl.qq.com
-0.0.0.0 p2pupgrade.gamedl.qq.com
-0.0.0.0 p2pvod-ws.douyucdn.cn
-0.0.0.0 pcdn.yximgs.com
-0.0.0.0 pkoplink.com
-0.0.0.0 saxysec.com
-0.0.0.0 stun.douyucdn.cn
-0.0.0.0 stun.hitv.com
-0.0.0.0 stun1.douyucdn.cn
-0.0.0.0 szbdyd.com
-0.0.0.0 uhabo.com
-0.0.0.0 xycdn.com
-
-
+||bsccdn.net^
+||dyp2p-ali.douyucdn.cn^
+||dyp2p-hw.douyucdn.cn^
+||ietheivaicai.com^
+||kuiniuca.com^
+||nexusedgeio.com^
+||onethingpcs.com^
+||p2p-ali.douyucdn.cn^
+||p2p.huya.com^
+||p2p.qq.com^
+||p2pchunk-hw.douyucdn.cn^
+||p2pchunk-table.douyucdn.cn^
+||p2pchunk-ws.douyucdn.cn^
+||p2perrorlog.douyucdn.cn^
+||p2plive-ali.douyucdn.cn^
+||p2plive-ws.douyucdn.cn^
+||p2plog.douyucdn.cn^
+||p2ptun.qq.com^
+||p2pupdate.gamedl.qq.com^
+||p2pupgrade.gamedl.qq.com^
+||p2pvod-ws.douyucdn.cn^
+||pcdn.yximgs.com^
+||pkoplink.com^
+||saxysec.com^
+||stun.douyucdn.cn^
+||stun.hitv.com^
+||stun1.douyucdn.cn^
+||szbdyd.com^
+||uhabo.com^
+||xycdn.com^
 # Encrypted DNS servers
-0.0.0.0 api.yuedu.dns.iqiyi.com
-0.0.0.0 apidns.kwd.inkuai.com
-0.0.0.0 bj.vip.waf.dns.iqiyi.com
-0.0.0.0 data.video.dns.iqiyi.com
-0.0.0.0 dns.alidns.com
-0.0.0.0 dns.iqiyi.com
-0.0.0.0 dns.jd.com
-0.0.0.0 dns.jd.com.gslb.qianxun.com
-0.0.0.0 dns.qiyipic.iqiyi.com
-0.0.0.0 dns.qq.com
-0.0.0.0 dns.weibo.cn
-0.0.0.0 dns.weixin.qq.com
-0.0.0.0 dns.weixin.qq.com.cn
-0.0.0.0 doh.dns.apple.com
-0.0.0.0 doh.iqiyi.com
-0.0.0.0 doh.jd.com
-0.0.0.0 doh.ptqy.gitv.tv
-0.0.0.0 dotserver.douyucdn.cn
-0.0.0.0 hdns.ksyun.com
-0.0.0.0 httpdns-api.aliyuncs.com
-0.0.0.0 httpdns-browser.platform.dbankcloud.cn
-0.0.0.0 httpdns-platform-dbankcloud-com-drcn.wec.dbankedge.cn
-0.0.0.0 httpdns-sc.aliyuncs.com
-0.0.0.0 httpdns-sdk.n.netease.com
-0.0.0.0 httpdns.alicdn.com
-0.0.0.0 httpdns.aliyuncs.com
-0.0.0.0 httpdns.baidu.com
-0.0.0.0 httpdns.baidubce.com
-0.0.0.0 httpdns.bcelive.com
-0.0.0.0 httpdns.bilivideo.com
-0.0.0.0 httpdns.browser.miui.com
-0.0.0.0 httpdns.c.163.com
-0.0.0.0 httpdns.c.cdnhwc2.com
-0.0.0.0 httpdns.calorietech.com
-0.0.0.0 httpdns.cctv.com
-0.0.0.0 httpdns.danuoyi.tbcache.com
-0.0.0.0 httpdns.gslb.yy.com
-0.0.0.0 httpdns.huaweicloud.com
-0.0.0.0 httpdns.kg.qq.com
-0.0.0.0 httpdns.kwd.inkuai.com
-0.0.0.0 httpdns.meituan.com
-0.0.0.0 httpdns.music.163.com
-0.0.0.0 httpdns.music.ntes53.netease.com
-0.0.0.0 httpdns.n.netease.com
-0.0.0.0 httpdns.n.shifen.com
-0.0.0.0 httpdns.ocloud.heytapmobi.com
-0.0.0.0 httpdns.ocloud.oppomobile.com
-0.0.0.0 httpdns.platform.dbankcloud.cn
-0.0.0.0 httpdns.platform.dbankcloud.com
-0.0.0.0 httpdns.pro
-0.0.0.0 httpdns.push.heytapmobi.com
-0.0.0.0 httpdns.push.oppomobile.com
-0.0.0.0 httpdns.tantanapp.com
-0.0.0.0 httpdns.volcengineapi.com
-0.0.0.0 httpdns.yunxindns.com
-0.0.0.0 httpdns.yunxinfw.com
-0.0.0.0 httpdns.zhihu.com
-0.0.0.0 httpdns.zybang.com
-0.0.0.0 httpdns1.cc.cdnhwc5.com
-0.0.0.0 httpsdns.baidu.com
-0.0.0.0 iface2.dns.iqiyi.com
-0.0.0.0 ipv6-static.dns.iqiyi.com
-0.0.0.0 lofter.httpdns.c.163.com
-0.0.0.0 music.httpdns.c.163.com
-0.0.0.0 ocloud-httpdns-cn.heytapmobi.com
-0.0.0.0 passport.dns.iqiyi.com
-0.0.0.0 static.dns.qiyipic.iqiyi.com
-0.0.0.0 union-httpdns.gslb.yy.com
-0.0.0.0 v6-data.video.dns.iqiyi.com
-
+||api.yuedu.dns.iqiyi.com^
+||apidns.kwd.inkuai.com^
+||bj.vip.waf.dns.iqiyi.com^
+||data.video.dns.iqiyi.com^
+||dns.alidns.com^
+||dns.iqiyi.com^
+||dns.jd.com^
+||dns.jd.com.gslb.qianxun.com^
+||dns.qiyipic.iqiyi.com^
+||dns.qq.com^
+||dns.weibo.cn^
+||dns.weixin.qq.com^
+||dns.weixin.qq.com.cn^
+||doh.dns.apple.com^
+||doh.iqiyi.com^
+||doh.jd.com^
+||doh.ptqy.gitv.tv^
+||dotserver.douyucdn.cn^
+||hdns.ksyun.com^
+||httpdns-api.aliyuncs.com^
+||httpdns-browser.platform.dbankcloud.cn^
+||httpdns-platform-dbankcloud-com-drcn.wec.dbankedge.cn^
+||httpdns-sc.aliyuncs.com^
+||httpdns-sdk.n.netease.com^
+||httpdns.alicdn.com^
+||httpdns.aliyuncs.com^
+||httpdns.baidu.com^
+||httpdns.baidubce.com^
+||httpdns.bcelive.com^
+||httpdns.bilivideo.com^
+||httpdns.browser.miui.com^
+||httpdns.c.163.com^
+||httpdns.c.cdnhwc2.com^
+||httpdns.calorietech.com^
+||httpdns.cctv.com^
+||httpdns.danuoyi.tbcache.com^
+||httpdns.gslb.yy.com^
+||httpdns.huaweicloud.com^
+||httpdns.kg.qq.com^
+||httpdns.kwd.inkuai.com^
+||httpdns.meituan.com^
+||httpdns.music.163.com^
+||httpdns.music.ntes53.netease.com^
+||httpdns.n.netease.com^
+||httpdns.n.shifen.com^
+||httpdns.ocloud.heytapmobi.com^
+||httpdns.ocloud.oppomobile.com^
+||httpdns.platform.dbankcloud.cn^
+||httpdns.platform.dbankcloud.com^
+||httpdns.pro^
+||httpdns.push.heytapmobi.com^
+||httpdns.push.oppomobile.com^
+||httpdns.tantanapp.com^
+||httpdns.volcengineapi.com^
+||httpdns.yunxindns.com^
+||httpdns.yunxinfw.com^
+||httpdns.zhihu.com^
+||httpdns.zybang.com^
+||httpdns1.cc.cdnhwc5.com^
+||httpsdns.baidu.com^
+||iface2.dns.iqiyi.com^
+||ipv6-static.dns.iqiyi.com^
+||lofter.httpdns.c.163.com^
+||music.httpdns.c.163.com^
+||ocloud-httpdns-cn.heytapmobi.com^
+||passport.dns.iqiyi.com^
+||static.dns.qiyipic.iqiyi.com^
+||union-httpdns.gslb.yy.com^
+||v6-data.video.dns.iqiyi.com^
 # 荣耀运动健康
-
 # ===== 广告 =====
 ||ads-drcn.platform.hihonorcloud.com^
 ||adplatform-drcn.hihonorcdn.com^
 ||contentplatform-drcn.hihonorcdn.com^
-
 # ===== 遥测/日志（屏蔽只断遥测）=====
 ||dap-cn.c.hihonor.com^
 ||metrics-drcn.dt.hihonorcloud.com^
 ||logservice-drcn.dt.hihonorcloud.com^
 ||metrics-ad-drcn.dt.hihonorcloud.com^
-
 # ===== 软件更新（屏蔽后不再提示更新）=====
 ||update-drcn.platform.hihonorcloud.com^
 ||update-check-test.test.hihonor.com^
-
 # ===== 菜鸟穿山甲广告 =====
 ||pangolin-sdk-toutiao.com^
 ||sf3-fe-tos.pglstatp-toutiao.com^
 ||cdn-tos-cn.bytedance.net^
 ||scc.bytedance.com^
-
 # 某个知名软件
 ||gdt.qq.com^
 ||ugdtimg.com^
-
-
 # 国内IDE
 ||gateway.qoder.com.cn^
 ||trae-api-cn.mchost.guru^
