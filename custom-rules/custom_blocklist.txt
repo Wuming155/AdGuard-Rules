@@ -151,3 +151,8 @@
 # 某个知名软件
 ||gdt.qq.com^
 ||ugdtimg.com^
+
+
+# 国内IDE
+||gateway.qoder.com.cn^
+||trae-api-cn.mchost.guru^
