@@ -144,3 +144,25 @@
 # 国内IDE
 ||gateway.qoder.com.cn^
 ||trae-api-cn.mchost.guru^
+# 腾讯 Galileo 遥测（coding-copilot 扩展 / CodeBuddy CN IDE / CLI 共用）
+||galileotelemetry.tencent.com^
+
+#------- Trae / 字节 遥测屏蔽 -------
+||tosv.byted.org^
+||metrics.byted.org^
+||pc-mon-sg.byteintlapi.com^
+||data.bytedance.net^
+||mon.zijieapi.com^
+||mcs.zijieapi.com^
+||pc-mon.zijieapi.com^
+||tosv.tiktokd.org^
+
+#------- WorkBuddy / 腾讯 遥测屏蔽 -------
+||otheve.beacon.qcloud.com^
+||ardot.tencent.com^
+||test.ardot.tencent.com^
+
+#------- CodeBuddy CN IDE 遥测屏蔽 -------
+||aegis.qq.com^
+||tamaegis.com^
+||otheve.beacon.qq.com^
