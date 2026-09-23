@@ -156,6 +156,7 @@
 ||mcs.zijieapi.com^
 ||pc-mon.zijieapi.com^
 ||tosv.tiktokd.org^
+||api5-normal.mchost.guru^
 
 #------- WorkBuddy / 腾讯 遥测屏蔽 -------
 ||otheve.beacon.qcloud.com^
