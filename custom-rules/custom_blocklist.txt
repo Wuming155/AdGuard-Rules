@@ -144,6 +144,7 @@
 # 国内IDE
 ||gateway.qoder.com.cn^
 ||trae-api-cn.mchost.guru^
+||openapi.qoder.sh^
 # 腾讯 Galileo 遥测（coding-copilot 扩展 / CodeBuddy CN IDE / CLI 共用）
 ||galileotelemetry.tencent.com^
 
