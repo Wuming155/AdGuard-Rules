@@ -8,12 +8,12 @@ AdGuard 广告过滤规则合集，每日自动更新。
 
 | 规则文件 | 说明 | 规则数量 | 下载链接 |
 | :--- | :--- | :--- | :--- |
-| adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 1083884 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/adguard_rules.txt) |
+| adguard_rules.txt | AdGuard DNS 格式完整规则集，适用于 AGHForRoot / AdGuard Home | 1084453 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/adguard_rules.txt) |
 | hosts_rules.txt | Hosts 格式，适用于 bindhosts 等 Magisk 模块 | 256945 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/hosts_rules.txt) |
 | hosts_rules_dedup.txt | 去重版，去掉 AdGuard 已覆盖域名，可搭配 adguard_rules.txt 使用 | 10158 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/hosts_rules_dedup.txt) |
-| adguard_lite.txt | AdGuard 格式精简版（仅广告过滤） | 212985 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/adguard_lite.txt) |
+| adguard_lite.txt | AdGuard 格式精简版（仅广告过滤） | 213310 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/adguard_lite.txt) |
 | hosts_lite.txt | Hosts 格式精简版（仅广告过滤） | 110617 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/hosts_lite.txt) |
 | hosts_lite_dedup.txt | 去重版精简 Hosts，可搭配 adguard_lite.txt 使用 | 10160 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/hosts_lite_dedup.txt) |
 | whitelist.txt | 收录的白名单域名，按需导入即可放行 | 153 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/whitelist.txt) |
 
-⏰ 最后更新: 2026-10-03 13:58:33
+⏰ 最后更新: 2026-10-04 14:35:33
