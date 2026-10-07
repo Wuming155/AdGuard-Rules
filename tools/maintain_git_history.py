@@ -13,10 +13,14 @@
   - 检测未提交更改并中止
   - 仅操作当前分支
 
-用法:
+用法（仅在 GitHub Actions 中执行，见 .github/workflows/monthly_cleanup.yml）:
   python tools/maintain_git_history.py                  # 保留最近 3 个月
   python tools/maintain_git_history.py --keep-months 6  # 保留最近 6 个月
   python tools/maintain_git_history.py --dry-run        # 预览模式
+
+注意:
+  本脚本会重写历史（重建根提交并 force push）。若在本机执行，会与远端历史
+  产生无共同祖先的分叉。因此本地运行默认被拒绝，历史清理统一交由 CI 负责。
 """
 
 import argparse
@@ -75,6 +79,11 @@ def main() -> None:
         action="store_true",
         help="仅预览要执行的操作，不实际修改仓库",
     )
+    parser.add_argument(
+        "--allow-local",
+        action="store_true",
+        help="允许在非 CI 环境（本地）执行，慎用：会与远端历史分叉",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -82,6 +91,21 @@ def main() -> None:
         format="%(asctime)s [%(levelname)-7s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+
+    # 历史清理只允许在 CI 中执行。本地执行会重建根提交，与远端历史失去共同祖先，
+    # 之后每次 pull 都会被判定为 diverged（曾出现 103 / 53 的分叉）。
+    is_ci = os.environ.get("GITHUB_ACTIONS", "").lower() == "true"
+    if not is_ci and not args.allow_local:
+        logger.error(
+            "拒绝在本地执行：历史清理统一由 GitHub Actions 负责"
+            "（.github/workflows/monthly_cleanup.yml）。"
+        )
+        logger.error(
+            "本地执行会重建根提交，与远端历史产生无共同祖先的分叉，"
+            "导致 git status 显示大量 diverged 提交。"
+        )
+        logger.error("如确需强制执行，请显式添加 --allow-local，并自行 force push。")
+        sys.exit(1)
 
     repo_root = Path.cwd()
     logger.info("仓库路径: %s", repo_root)
