@@ -32,6 +32,7 @@ t5.market.xiaomi.com
 a.market.xiaomi.com
 # 小米 rom
 connect.rom.miui.com
+update.miui.com
 # 小米浏览器服务
 browser.miui.com
 api.browser.miui.com
