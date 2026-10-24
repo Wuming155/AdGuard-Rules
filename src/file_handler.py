@@ -1,34 +1,19 @@
-"""文件处理器 — 向后兼容外观（Facade），内部委托给三个子模块"""
+"""文件处理器 — 外观（Facade），聚合规则写出与统计更新两个子模块"""
 
-from .sources_reader import SourcesReader
 from .rule_writer import RuleWriter
 from .stats_updater import StatsUpdater
 from .config import Config
 
 
 class FileHandler:
-    """文件处理器（外观模式，向后兼容旧接口）"""
+    """文件处理器（外观模式）"""
 
     def __init__(self, config: Config = None):
         cfg = config or Config()
 
         self.config = cfg
-        self._sources_reader = SourcesReader(
-            adguard_file=cfg.path.sources_adguard_file,
-            host_file=cfg.path.sources_host_file,
-            adguard_lite_file=cfg.path.sources_adguard_lite_file,
-            host_lite_file=cfg.path.sources_host_lite_file,
-        )
         self._rule_writer = RuleWriter(cfg.path.dist_dir, cfg.github_repo)
         self._stats_updater = StatsUpdater(cfg.path.readme_path, cfg.github_repo)
-
-    # ------------------------------------------------------------------
-    # 委托给 SourcesReader
-    # ------------------------------------------------------------------
-
-    def read_sources(self) -> list[str]:
-        """读取远程规则源 URL 列表。"""
-        return self._sources_reader.read_sources()
 
     # ------------------------------------------------------------------
     # 委托给 RuleWriter

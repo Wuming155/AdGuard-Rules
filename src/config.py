@@ -39,11 +39,7 @@ class RuleConfig:
 # ---------------------------------------------------------------------------
 
 class Config:
-    """聚合配置类 — 向后兼容 config.xxx 写法，同时提供子配置入口。
-
-    所有快捷属性均为只读 @property，直接代理子配置，
-    消除了数据同步问题。
-    """
+    """聚合配置类 — 组合路径与规则两个专题子配置。"""
 
     def __init__(self):
         self.github_repo = os.getenv('GITHUB_REPOSITORY', 'Wuming155/AdGuard-Rules')
@@ -51,29 +47,3 @@ class Config:
         # 子配置（不可变，按模块注入）
         self.path = PathConfig()
         self.rule = RuleConfig()
-
-    # --- 向后兼容的只读快捷属性 ---
-
-    @property
-    def sources_adguard_file(self) -> str:
-        return self.path.sources_adguard_file
-
-    @property
-    def sources_host_file(self) -> str:
-        return self.path.sources_host_file
-
-    @property
-    def dist_dir(self) -> str:
-        return self.path.dist_dir
-
-    @property
-    def custom_rules_dir(self) -> str:
-        return self.path.custom_rules_dir
-
-    @property
-    def readme_path(self) -> str:
-        return self.path.readme_path
-
-    @property
-    def hosts_ip(self) -> str:
-        return self.rule.hosts_ip

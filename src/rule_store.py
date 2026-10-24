@@ -19,11 +19,6 @@ class RuleStore:
     R_TYPE_ADGUARD_LITE: str = 'adguard_lite'
     R_TYPE_HOSTS_LITE_DEDUP: str = 'hosts_lite_dedup'
 
-    # 由远程/本地源直接采集的集合
-    ALL_RULE_TYPES = frozenset({
-        R_TYPE_HOSTS, R_TYPE_WHITELIST, R_TYPE_ADGUARD,
-    })
-
     # 需要落盘为 dist/*.txt 的集合（含派生集合）
     OUTPUT_RULE_TYPES = (
         R_TYPE_ADGUARD,
@@ -49,6 +44,9 @@ class RuleStore:
             self.R_TYPE_ADGUARD_LITE: set(),
             self.R_TYPE_HOSTS_LITE_DEDUP: set(),
         }
+        # get_collection 的快照缓存：集合动辄上百万条，逐次整体复制代价过高，
+        # 改为缓存并在集合变更时按名失效
+        self._snapshots: dict[str, frozenset[str]] = {}
 
     # ------------------------------------------------------------------
     # 规则添加（统一入口）
@@ -65,14 +63,19 @@ class RuleStore:
             return
 
         self.collections[rtype].add(rule)
+        self._snapshots.pop(rtype, None)
 
     # ------------------------------------------------------------------
     # 集合查询（返回不可变视图，防止外部意外修改）
     # ------------------------------------------------------------------
 
     def get_collection(self, name: str) -> frozenset[str]:
-        """获取规则集合的只读快照。"""
-        return frozenset(self.collections.get(name, set()))
+        """获取规则集合的只读快照（带缓存，集合变更后自动失效）。"""
+        snapshot = self._snapshots.get(name)
+        if snapshot is None:
+            snapshot = frozenset(self.collections.get(name, set()))
+            self._snapshots[name] = snapshot
+        return snapshot
 
     def get_collection_size(self, name: str) -> int:
         """获取集合规则数量。"""
@@ -92,6 +95,7 @@ class RuleStore:
             logger.warning("尝试替换未知集合 '%s'", name)
             return
         self.collections[name] = rules
+        self._snapshots.pop(name, None)
 
     # ------------------------------------------------------------------
     # 统计 & 日志

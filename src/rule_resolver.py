@@ -39,11 +39,6 @@ class RuleResolver:
         # 预编译 hosts IP 前缀正则
         self._hosts_ip_re = re.compile(r'^(?:0\.0\.0\.0|127\.0\.0\.1|::(?:[01])?)')
 
-    @property
-    def hosts_ip(self) -> str:
-        """当前使用的 Hosts 重定向 IP。"""
-        return self._rule_config.hosts_ip
-
     @staticmethod
     def is_ip(value: str) -> bool:
         """判断字符串是否为 IP 地址（IPv4 或 IPv6）。"""
@@ -95,6 +90,10 @@ class RuleResolver:
                     parts = line.split(None, 2)
                     if len(parts) >= 2:
                         target = parts[1].strip().lower()
+                        # 一行多个域名时只保留第一个，其余会被丢掉，因此显式告警
+                        extra = parts[2].strip().lower() if len(parts) == 3 else ''
+                        if extra and self.domain_pattern.match(extra):
+                            logger.warning("Hosts 行含多个域名，仅保留第一个: %s", line.strip()[:80])
                         if target not in ('localhost', 'localhost.localdomain') and not self.is_ip(target):
                             return 'hosts_rules', f"{self._rule_config.hosts_ip} {target}"
                     return None, None
@@ -107,13 +106,18 @@ class RuleResolver:
             if not self.is_ip(domain):
                 return 'hosts_rules', f"{self._rule_config.hosts_ip} {domain}"
 
-        # 6. URL 路径类型
+        # 6. URL 规则（可带协议头，如 http://example.com/ads.js）与 域名/路径 规则
         if '/' in line and not self._hosts_ip_re.match(line):
-            slash_idx = line.index('/')
-            domain_part = line[:slash_idx]
-            if domain_part and self.domain_pattern.match(domain_part):
+            # 先去掉协议头再取域名部分，否则 http(s):// 会把域名切碎而漏掉整条规则
+            candidate = re.sub(r'^[a-zA-Z][a-zA-Z0-9+.\-]*://', '', line)
+            if candidate.startswith('/'):
                 return 'adguard_rules', line
-            if line.startswith('/'):
+            if '/' in candidate:
+                domain_part = candidate.split('/', 1)[0]
+                if domain_part and self.domain_pattern.match(domain_part):
+                    return 'adguard_rules', line
+            elif self.domain_pattern.match(candidate):
+                # 形如 https://example.com 的纯 URL 规则
                 return 'adguard_rules', line
 
         return None, None

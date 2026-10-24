@@ -88,10 +88,3 @@ class SourcesReader:
     def read_host_lite_sources(self) -> list[str]:
         """读取 Hosts Lite 格式规则源 URL 列表。"""
         return self._read_file(self._host_lite_file, 'Hosts Lite')
-
-    def read_sources(self) -> list[str]:
-        """读取所有远程规则源 URL 列表（合并两个文件，向后兼容）。
-
-        :returns: 合并后的 URL 列表
-        """
-        return self.read_adguard_sources() + self.read_host_sources()

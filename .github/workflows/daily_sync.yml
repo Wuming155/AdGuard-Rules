@@ -2,7 +2,7 @@ name: Update Rules and README
 
 on:
   schedule:
-    - cron: '0 1 * * *' # 每天 UTC 01:00 = 中国 09:00
+    - cron: '0 1 * * *' # 每天 UTC 01:00 = 中国 09:00（GitHub 排队会有延迟）
   workflow_dispatch:      # 允许手动在 GitHub 页面点击运行
   push:
     paths:
@@ -10,7 +10,13 @@ on:
       - 'main_executor.py'
       - 'custom-rules/**'
       - 'src/**'           # 代码修改后自动重新生成
+      - 'tests/**'         # 测试变更后自动重新生成
       - '.github/workflows/*.yml'  # 工作流配置变更后触发
+
+# 同一时刻只允许一个同步任务：手动触发与定时任务并发时会互相 force-push
+concurrency:
+  group: rules-sync
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -35,6 +41,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run Unit Tests
+        run: python -m unittest discover -s tests -t . -v
+
       - name: Run Update Script
         run: python main_executor.py
 
@@ -45,7 +54,7 @@ jobs:
           
           # dist/ 已被 .gitignore 忽略：规则文件不进 git 仓库（避免仓库膨胀），
           # 改为在下一步以 Release 附件形式分发
-          git add .
+          git add README.md
           
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Auto Update Stats: $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M:%S')"
