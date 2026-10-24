@@ -3,6 +3,7 @@
 import logging
 import re
 from pathlib import Path
+from typing import Iterator
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -10,27 +11,36 @@ from urllib3.util import Retry
 
 from .rule_store import RuleStore
 from .rule_resolver import RuleResolver
+from .source_cache import SourceCache
 from .sources_reader import SourcesReader
 from .config import PathConfig
 
 logger = logging.getLogger(__name__)
 
 
-class RuleFetcher:
-    """规则获取器
+class SourceTooLarge(Exception):
+    """响应体超过单源上限。"""
 
-    依赖精简后：
-      - SourcesReader  读取两个规则源文件（AdGuard / Hosts）
-      - RuleResolver   规则解析
-      - RuleStore      规则存储
-      - PathConfig     路径配置
+    def __init__(self, limit: int):
+        super().__init__(f"响应体超过 {limit // (1024 * 1024)}MB 上限")
+        self.limit = limit
+
+
+class RuleFetcher:
+    """规则获取器（容错式聚合）
+
+    单个源拉取失败、解析失败或超出大小上限时均不中止构建：
+    优先回退该源「最近一次成功」的缓存，无可用缓存时跳过并记录原因。
+
+    每个源解析出的规则先暂存，只有该源被接受（拉取成功或缓存回退）才并入规则集合，
+    避免半途失败的源留下不完整数据。每个源的处理结果记录在 source_status 中，
+    供构建日志汇总使用。
     """
 
     # 单个远程源的响应体上限（按解压后的字节数累计），作为异常响应的安全阀；
     # 解析按行流式进行，不把整个响应体驻留内存。
     # 取 100MB 与 GitHub「仓库单文件 100MB」的限制对齐：托管在 GitHub 的源不会更大。
     # 目前最大的源是 blocklistproject 的 malware-ags.txt（约 56MB / 265 万条）。
-    # 超过该上限的源会被标记并让整次运行失败，不会静默丢弃。
     DEFAULT_MAX_RESPONSE_SIZE = 100 * 1024 * 1024  # 100 MB
     _CHUNK_SIZE = 8192
 
@@ -39,34 +49,35 @@ class RuleFetcher:
         r'^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$'
     )
 
+    # 单个源的处理状态
+    STATUS_OK = 'ok'
+    STATUS_CACHE = 'cache'
+    STATUS_SKIPPED = 'skipped'
+
     def __init__(self,
                  sources_reader: SourcesReader,
                  resolver: RuleResolver,
                  rule_store: RuleStore,
                  path_config: PathConfig | None = None,
-                 max_response_size: int = DEFAULT_MAX_RESPONSE_SIZE):
+                 max_response_size: int = DEFAULT_MAX_RESPONSE_SIZE,
+                 source_cache: SourceCache | None = None):
         """
         :param sources_reader:    规则源读取器
         :param resolver:          规则解析器
         :param rule_store:        规则存储容器
         :param path_config:       路径配置
-        :param max_response_size: 单源响应体上限（字节），超出视为异常并计入失败
+        :param max_response_size: 单源响应体上限（字节），超出即回退缓存或跳过
+        :param source_cache:      源缓存（默认按路径配置创建）
         """
         self._sources_reader = sources_reader
         self._resolver = resolver
         self._store = rule_store
         self._path_config = path_config or PathConfig()
         self._max_response_size = max_response_size
+        self._cache = source_cache or SourceCache(self._path_config.source_cache_dir)
 
-        # 远程源拉取统计（供外部查询）
-        self.fetch_stats: dict[str, int] = {
-            'success': 0,
-            'failed': 0,
-            'truncated': 0,
-        }
-
-        # 本次运行中未能完整拉取的源（url, 原因），供完整性检查使用
-        self.problem_sources: list[tuple[str, str]] = []
+        # 本次运行中每个远程源的处理结果
+        self.source_status: list[dict] = []
 
     # ------------------------------------------------------------------
     # 本地规则
@@ -140,91 +151,144 @@ class RuleFetcher:
         s = line.strip()
         return not s or s.startswith(('!', '#'))
 
-    def _mark_problem(self, url: str, reason: str, *, truncated: bool = False) -> None:
-        """记录未能完整拉取的规则源。"""
-        self.fetch_stats['truncated' if truncated else 'failed'] += 1
-        self.problem_sources.append((url, reason))
-        logger.error("规则源异常: %s — %s", url, reason)
+    # ------------------------------------------------------------------
+    # 状态记录
+    # ------------------------------------------------------------------
+
+    def _record(self, url: str, status: str, rules: int = 0,
+                reason: str = '', cached_at: str = '') -> None:
+        """记录单个源的处理结果。"""
+        self.source_status.append({
+            'url': url,
+            'status': status,
+            'rules': rules,
+            'reason': reason,
+            'cached_at': cached_at,
+        })
+
+    def degraded_sources(self) -> list[dict]:
+        """未能使用最新上游内容的源（缓存回退或跳过）。"""
+        return [s for s in self.source_status if s['status'] != self.STATUS_OK]
 
     # ------------------------------------------------------------------
     # 远程规则
     # ------------------------------------------------------------------
 
+    def _stream_lines(self, response: requests.Response) -> Iterator[str]:
+        """按行解码响应体，并累计解压后的大小做上限保护。"""
+        total = 0
+        for raw in response.iter_lines(chunk_size=self._CHUNK_SIZE):
+            if not raw:
+                continue
+            total += len(raw) + 1
+            if total > self._max_response_size:
+                raise SourceTooLarge(self._max_response_size)
+            yield raw.decode('utf-8', errors='replace')
+
+    def _ingest_lines(self, lines: Iterator[str], is_lite: bool,
+                      sink: '_CacheWriter | None' = None) -> tuple[dict[str, set[str]], dict[str, int]]:
+        """解析行迭代器，结果先暂存，不直接写入规则集合。
+
+        :param lines:   已解码的行迭代器
+        :param is_lite: 是否按 Lite 集合归类
+        :param sink:    非空时同步写入源缓存
+        :returns: (暂存的 {集合名: 规则集合}, 统计信息)
+        """
+        staged: dict[str, set[str]] = {}
+        stats = {'added': 0, 'skipped': 0, 'errors': 0, 'replaced': 0}
+
+        for line in lines:
+            if sink is not None:
+                sink.write_line(line)
+            if '\ufffd' in line:
+                stats['replaced'] += 1
+
+            try:
+                rtype, rule = self._resolver.resolve(line)
+            except Exception:
+                stats['errors'] += 1
+                continue
+
+            if not rtype:
+                if not self._is_comment(line):
+                    stats['skipped'] += 1
+                continue
+
+            target = self._map_lite_rtype(rtype) if is_lite else rtype
+            if not target:
+                continue
+            staged.setdefault(target, set()).add(rule)
+            stats['added'] += 1
+
+        return staged, stats
+
+    def _merge_staged(self, staged: dict[str, set[str]]) -> int:
+        """把暂存的规则并入规则集合，返回并入的规则条数。"""
+        merged = 0
+        for rtype, rules in staged.items():
+            for rule in rules:
+                self._store.add_rule(rtype, rule)
+            merged += len(rules)
+        return merged
+
+    @staticmethod
+    def _log_stats(url: str, stats: dict[str, int]) -> None:
+        logger.info("处理完成: 解析出 %d 条规则，跳过 %d 行非规则内容",
+                    stats['added'], stats['skipped'])
+        if stats['replaced']:
+            logger.warning("⚠ %s 含 %d 行非 UTF-8 字符，已按替换字符处理", url, stats['replaced'])
+        if stats['errors']:
+            logger.warning("⚠ %d 行解析异常", stats['errors'])
+
+    def _fallback_to_cache(self, url: str, is_lite: bool, reason: str) -> None:
+        """拉取失败后的容错处理：优先用最近一次成功缓存，否则跳过并记录原因。"""
+        meta = self._cache.entry(url)
+        if meta is None:
+            self._record(url, self.STATUS_SKIPPED, reason=f"{reason}；无可用缓存")
+            logger.warning("跳过规则源 %s（%s，且无可用缓存）", url, reason)
+            return
+
+        staged, stats = self._ingest_lines(self._cache.read_lines(url), is_lite)
+        merged = self._merge_staged(staged)
+        cached_at = meta.get('fetched_at', '未知时间')
+        self._record(url, self.STATUS_CACHE, rules=merged, reason=reason, cached_at=cached_at)
+        logger.warning("回退缓存: %s（拉取失败: %s；使用 %s 的缓存，%d 条）",
+                       url, reason, cached_at, merged)
+        self._log_stats(url, stats)
+
     def _process_single_source(self, session: requests.Session, url: str,
                                 is_host_source: bool, is_lite: bool, index: int,
                                 total: int) -> None:
-        """拉取并处理单个远程源的内容（逐行流式解析，不在内存中缓存响应体）。
+        """拉取并处理单个远程源；失败时回退缓存或跳过，不中断构建。"""
+        logger.info("[%d/%d] 获取: %s%s", index, total, url,
+                    ' [Lite]' if is_lite else '')
+        timeout = 30 if is_host_source else 10
+        problem = ''
 
-        :param session:        requests Session
-        :param url:            远程源 URL
-        :param is_host_source: 是否为 Hosts 类型源（影响超时）
-        :param is_lite:        是否为 Lite 精简版源
-        :param index:          当前序号（日志用）
-        :param total:          总数（日志用）
-        """
         try:
-            logger.info("[%d/%d] 获取: %s%s", index, total, url,
-                        ' [Lite]' if is_lite else '')
-            timeout = 30 if is_host_source else 10
-
             with session.get(url, timeout=timeout, stream=True) as response:
                 if response.status_code != 200:
-                    self._mark_problem(url, f"HTTP {response.status_code}")
+                    problem = f"HTTP {response.status_code}"
+                else:
+                    # 边解析边把原始内容写入缓存；只有完整读完才提交
+                    with self._cache.writer(url) as sink:
+                        staged, stats = self._ingest_lines(self._stream_lines(response), is_lite, sink)
+                        merged = self._merge_staged(staged)
+                        sink.commit(merged)
+                    self._record(url, self.STATUS_OK, rules=merged)
+                    self._log_stats(url, stats)
+                    logger.info("当前规则数量: %s", self._store.get_status_str())
                     return
-
-                added = 0
-                skipped = 0
-                replaced = 0
-                error_count = 0
-                total_size = 0
-
-                for raw_line in response.iter_lines(chunk_size=self._CHUNK_SIZE):
-                    if not raw_line:
-                        continue
-
-                    total_size += len(raw_line) + 1
-                    if total_size > self._max_response_size:
-                        self._mark_problem(
-                            url,
-                            f"响应体超过 {self._max_response_size // (1024 * 1024)}MB 上限",
-                            truncated=True,
-                        )
-                        return
-
-                    line = raw_line.decode('utf-8', errors='replace')
-                    if '\ufffd' in line:
-                        replaced += 1
-
-                    try:
-                        rtype, rule = self._resolver.resolve(line)
-                    except Exception:
-                        error_count += 1
-                        continue
-
-                    if rtype:
-                        added += 1
-                        if is_lite:
-                            target = self._map_lite_rtype(rtype)
-                            if target:
-                                self._store.add_rule(target, rule)
-                        else:
-                            self._store.add_rule(rtype, rule)
-                    elif not self._is_comment(line):
-                        skipped += 1
-
-                self.fetch_stats['success'] += 1
-                logger.info("处理完成: 解析出 %d 条规则，跳过 %d 行非规则内容", added, skipped)
-                if replaced:
-                    logger.warning("⚠ %s 含 %d 行非 UTF-8 字符，已按替换字符处理", url, replaced)
-                if error_count:
-                    logger.warning("⚠ %d 行解析失败", error_count)
-
+        except SourceTooLarge as e:
+            problem = str(e)
         except requests.RequestException as e:
-            self._mark_problem(url, f"网络异常: {e}")
+            problem = f"网络异常: {e}"
         except Exception as e:
             logger.error("获取 %s 时出错: %s", url, e, exc_info=True)
-            self._mark_problem(url, f"处理异常: {e}")
+            problem = f"处理异常: {e}"
 
+        logger.error("规则源异常: %s — %s", url, problem)
+        self._fallback_to_cache(url, is_lite, problem)
         logger.info("当前规则数量: %s", self._store.get_status_str())
 
     def read_remote_rules(self) -> None:
@@ -256,8 +320,7 @@ class RuleFetcher:
             len(adguard_lite_urls), len(host_lite_urls),
         )
 
-        self.fetch_stats.update(success=0, failed=0, truncated=0)
-        self.problem_sources.clear()
+        self.source_status.clear()
 
         # 构建带重试的 Session
         session = requests.Session()
@@ -276,14 +339,23 @@ class RuleFetcher:
                 self._process_single_source(session, url, is_host_source, is_lite, i, total)
         finally:
             session.close()
-            # 汇总远程源拉取结果
-            logger.info(
-                "远程源拉取汇总: 成功 %d, 失败 %d, 截断 %d",
-                self.fetch_stats['success'],
-                self.fetch_stats['failed'],
-                self.fetch_stats['truncated'],
-            )
-            if self.problem_sources:
-                logger.error("以下规则源未能完整拉取（本次产出会缺少对应规则）:")
-                for url, reason in self.problem_sources:
-                    logger.error("  - %s （%s）", url, reason)
+            self._log_summary()
+
+    def _log_summary(self) -> None:
+        """按状态汇总每个源的处理结果（正常 / 缓存回退 / 跳过）。"""
+        ok = [s for s in self.source_status if s['status'] == self.STATUS_OK]
+        cached = [s for s in self.source_status if s['status'] == self.STATUS_CACHE]
+        skipped = [s for s in self.source_status if s['status'] == self.STATUS_SKIPPED]
+
+        logger.info("远程源汇总: 正常 %d 个 / 缓存回退 %d 个 / 跳过 %d 个",
+                    len(ok), len(cached), len(skipped))
+
+        for s in cached:
+            logger.warning("  [缓存回退] %s（原因: %s；%d 条；缓存于 %s）",
+                           s['url'], s['reason'], s['rules'], s['cached_at'])
+        for s in skipped:
+            logger.error("  [跳过] %s（原因: %s）", s['url'], s['reason'])
+
+        if cached or skipped:
+            logger.warning("以上 %d 个源未使用最新上游内容，产物会缺少对应规则（已记录，非静默忽略）",
+                           len(cached) + len(skipped))

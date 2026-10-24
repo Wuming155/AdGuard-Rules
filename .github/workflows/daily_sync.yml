@@ -41,6 +41,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Restore Source Cache
+        uses: actions/cache@v4
+        with:
+          path: cache
+          key: rules-source-cache-${{ github.run_id }}
+          restore-keys: |
+            rules-source-cache-
+
       - name: Run Unit Tests
         run: python -m unittest discover -s tests -t . -v
 

@@ -18,6 +18,8 @@ class PathConfig:
     dist_dir: str = 'dist'
     custom_rules_dir: str = 'custom-rules'
     readme_path: str = 'README.md'
+    source_cache_dir: str = 'cache/sources'
+    build_baseline_file: str = 'cache/last_build.json'
 
     def __post_init__(self):
         if not self.dist_dir:

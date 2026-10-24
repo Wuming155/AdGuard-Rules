@@ -10,6 +10,9 @@ __pycache__/
 # 下载地址为 https://github.com/<owner>/<repo>/releases/latest/download/<文件名>
 dist/
 
+# 规则源缓存与构建基线（CI 通过 actions/cache 持久化，不入库）
+cache/
+
 # 分析脚本缓存（本地运行时生成，体积较大不入库）
 analysis/cache/
 

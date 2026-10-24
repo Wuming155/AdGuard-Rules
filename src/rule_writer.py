@@ -47,8 +47,13 @@ class RuleWriter:
         file_content = "\n".join(header) + "\n" + "\n".join(sorted_rules) + "\n"
 
         file_path = self._dist_dir / f"{file_name}.txt"
+        tmp_path = file_path.with_name(f"{file_path.name}.tmp")
         try:
-            file_path.write_text(file_content, encoding='utf-8')
+            # 先写临时文件再原子替换：中途失败不会覆盖已有的有效产物
+            tmp_path.write_text(file_content, encoding='utf-8')
+            tmp_path.replace(file_path)
             logger.info("已写入 %s.txt，共 %d 条规则", file_name, len(sorted_rules))
         except OSError as e:
+            tmp_path.unlink(missing_ok=True)
             logger.error("写入 %s.txt 失败: %s", file_name, e)
+            raise

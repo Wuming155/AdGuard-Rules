@@ -9,7 +9,9 @@ from .file_handler import FileHandler
 from .sources_reader import SourcesReader
 from .rule_writer import RuleWriter
 from .stats_updater import StatsUpdater
-from .main import MainExecutor
+from .source_cache import SourceCache
+from .build_baseline import BuildBaseline
+from .main import MainExecutor, BuildQualityError
 
 __all__ = [
     # 配置
@@ -24,6 +26,10 @@ __all__ = [
     'SourcesReader',
     'RuleWriter',
     'StatsUpdater',
+    # 缓存与构建基线
+    'SourceCache',
+    'BuildBaseline',
     # 主执行器
     'MainExecutor',
+    'BuildQualityError',
 ]
