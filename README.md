@@ -16,4 +16,4 @@ AdGuard 广告过滤规则合集，每日自动更新。
 | hosts_lite_dedup.txt | 去重版精简 Hosts，可搭配 adguard_lite.txt 使用 | 10132 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/hosts_lite_dedup.txt) |
 | whitelist.txt | 收录的白名单域名，按需导入即可放行 | 154 | [点击下载](https://github.com/Wuming155/AdGuard-Rules/releases/latest/download/whitelist.txt) |
 
-⏰ 最后更新: 2026-10-24 19:37:39
+⏰ 最后更新: 2026-10-24 19:55:50
