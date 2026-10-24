@@ -4,7 +4,10 @@
 import sys
 import logging
 
+from src.config import Config
+from src.build_baseline import BuildBaseline
 from src.main import MainExecutor
+from src.stats_updater import StatsUpdater
 
 
 def _check_python_version() -> None:
@@ -38,12 +41,35 @@ def _setup_logging() -> None:
     root_logger.addHandler(handler)
 
 
+def record_baseline(dist_dir: str, baseline_path: str) -> dict[str, int]:
+    """按 dist/ 实际产出记录构建基线（供下次质量门禁比对）。
+
+    由 CI 在「发布成功后」调用，使基准只反映真正发布出去的构建：
+    若本次通过门禁但后续上传 Release 失败，就不会把这次规模记为上一成功版本。
+    """
+    counts = {
+        item['name'][: -len('.txt')]: item['count']
+        for item in StatsUpdater.get_file_stats(dist_dir)
+        if item['name'].endswith('.txt')
+    }
+    BuildBaseline(baseline_path).save(counts)
+    return counts
+
+
 def main() -> None:
     """主函数"""
     _check_python_version()
     _setup_logging()
 
     logger = logging.getLogger("main_executor")
+
+    if '--record-baseline' in sys.argv[1:]:
+        config = Config()
+        counts = record_baseline(config.path.dist_dir, config.path.build_baseline_file)
+        logger.info("已记录构建基线: %s",
+                    ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+        return
+
     logger.info("启动 AdGuard-Rules 规则同步...")
 
     executor = MainExecutor()

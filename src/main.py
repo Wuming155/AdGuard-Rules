@@ -235,24 +235,9 @@ class UpdateStatsStep(PipelineStep):
         self._fh.update_readme(all_stats)
 
 
-class RecordBaselineStep(PipelineStep):
-    """记录本次成功构建的规模，作为下次质量比对的基线"""
-
-    def __init__(self, rule_store: RuleStore, baseline: BuildBaseline):
-        self._store = rule_store
-        self._baseline = baseline
-
-    @property
-    def name(self) -> str:
-        return "记录构建基线"
-
-    def execute(self) -> None:
-        counts = {
-            name: self._store.get_collection_size(name)
-            for name in RuleStore.OUTPUT_RULE_TYPES
-        }
-        self._baseline.save(counts)
-        logger.info("已记录构建基线: %s", ", ".join(f"{k}={v}" for k, v in counts.items()))
+# 说明：构建基线不由流水线记录，而是在「发布成功之后」由 workflow 调用
+# `python main_executor.py --record-baseline` 写入；这样即使本次通过门禁但随后
+# 上传 Release 失败，也不会把这次规模误记为上一成功版本。
 
 
 # ======================================================================
@@ -330,9 +315,6 @@ class MainExecutor:
 
             WriteRulesStep(self.file_handler, self.rule_store),
             UpdateStatsStep(self.file_handler, self.config, self.rule_store),
-
-            # 全部成功后更新基线；本次未通过则保留上一次的基准
-            RecordBaselineStep(self.rule_store, self.build_baseline),
         ]
 
     # ------------------------------------------------------------------

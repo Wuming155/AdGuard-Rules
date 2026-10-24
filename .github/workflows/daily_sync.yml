@@ -100,3 +100,6 @@ jobs:
               dist/*.txt
           fi
           gh release edit "$TAG" --latest
+
+      - name: Record Build Baseline
+        run: python main_executor.py --record-baseline
