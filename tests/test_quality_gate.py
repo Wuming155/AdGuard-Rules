@@ -76,6 +76,64 @@ class TestQualityGate(QualityGateTestCase):
         self.gate(_store_with(adguard=3, hosts=2)).execute()
 
 
+class TestBaselineStatus(QualityGateTestCase):
+    """门禁要区分"基线不存在"与"基线存在但口径不兼容"，避免日志自相矛盾"""
+
+    def test_missing(self) -> None:
+        self.assertEqual({}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_MISSING, self.baseline.status)
+
+    def test_loaded(self) -> None:
+        self.baseline.save({RuleStore.R_TYPE_ADGUARD: 5})
+
+        self.assertEqual({RuleStore.R_TYPE_ADGUARD: 5}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_LOADED, self.baseline.status)
+
+    def test_incompatible_reports_both_schemas(self) -> None:
+        Path(self.baseline_path).write_text(
+            json.dumps({'schema': 99, 'counts': {RuleStore.R_TYPE_ADGUARD: 5}}),
+            encoding='utf-8',
+        )
+
+        self.assertEqual({}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_INCOMPATIBLE, self.baseline.status)
+        self.assertIn('99', self.baseline.detail)
+        self.assertIn(str(BuildBaseline.SCHEMA), self.baseline.detail)
+
+    def test_legacy_flat_format_is_incompatible(self) -> None:
+        Path(self.baseline_path).write_text(
+            json.dumps({RuleStore.R_TYPE_ADGUARD: 1000}), encoding='utf-8')
+
+        self.assertEqual({}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_INCOMPATIBLE, self.baseline.status)
+
+    def test_unreadable_is_reported_separately(self) -> None:
+        Path(self.baseline_path).write_text('{not json', encoding='utf-8')
+
+        self.assertEqual({}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_UNREADABLE, self.baseline.status)
+        self.assertTrue(self.baseline.detail)
+
+
+class TestBaselineCompatibility(QualityGateTestCase):
+    """口径不兼容时不做规模比对，避免误报"""
+
+    def test_incompatible_baseline_skips_shrink_check(self) -> None:
+        Path(self.baseline_path).write_text(
+            json.dumps({'schema': 0, 'counts': {RuleStore.R_TYPE_ADGUARD: 1000}}),
+            encoding='utf-8',
+        )
+
+        # 口径不可比 → 严重收缩也不拦（本次只做基础质量检查）
+        self.gate(_store_with(adguard=1, hosts=1)).execute()
+
+    def test_loaded_baseline_enables_shrink_check(self) -> None:
+        self.baseline.save({RuleStore.R_TYPE_ADGUARD: 1000, RuleStore.R_TYPE_HOSTS: 100})
+
+        with self.assertRaises(BuildQualityError):
+            self.gate(_store_with(adguard=100, hosts=100)).execute()
+
+
 class TestBaselineRecording(QualityGateTestCase):
     """基线由入口脚本在发布成功后记录（python main_executor.py --record-baseline）"""
 
@@ -90,33 +148,7 @@ class TestBaselineRecording(QualityGateTestCase):
         self.assertEqual(2, counts['adguard_rules'])
         self.assertEqual(1, counts['hosts_rules'])
         self.assertEqual(counts, self.baseline.load())
-
-    def test_recorded_baseline_blocks_next_severe_drop(self) -> None:
-        self.baseline.save({RuleStore.R_TYPE_ADGUARD: 1000, RuleStore.R_TYPE_HOSTS: 100})
-
-        with self.assertRaises(BuildQualityError):
-            self.gate(_store_with(adguard=100, hosts=100)).execute()
-
-
-class TestBaselineSchema(QualityGateTestCase):
-    """聚合口径变化（如后续引入祖先域名压缩）时自动跳过规模比对，避免误报"""
-
-    def test_incompatible_schema_is_not_compared(self) -> None:
-        path = Path(self.baseline_path)
-        path.write_text(
-            json.dumps({'schema': 0, 'counts': {RuleStore.R_TYPE_ADGUARD: 1000}}),
-            encoding='utf-8',
-        )
-
-        self.assertEqual({}, self.baseline.load())
-        # 口径不可比时只做基础校验，因此严重收缩也不会误拦
-        self.gate(_store_with(adguard=1, hosts=1)).execute()
-
-    def test_missing_schema_is_not_compared(self) -> None:
-        Path(self.baseline_path).write_text(
-            json.dumps({RuleStore.R_TYPE_ADGUARD: 1000}), encoding='utf-8')
-
-        self.assertEqual({}, self.baseline.load())
+        self.assertEqual(BuildBaseline.STATUS_LOADED, self.baseline.status)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,7 @@
+# Cloudflare API 优选 IP (按 IPv4 延迟从低到高排列)
+104.19.192.175  api.cloudflare.com
+104.19.192.29   api.cloudflare.com
+104.19.192.176  api.cloudflare.com
+104.19.192.174  api.cloudflare.com
+104.19.192.177  api.cloudflare.com
+104.19.193.29   api.cloudflare.com

@@ -166,16 +166,14 @@ class QualityGateStep(PipelineStep):
             problems.append("hosts_rules 为空，缺少基础拦截规则")
 
         baseline = self._baseline.load()
-        if baseline:
-            for name, current in counts.items():
-                previous = baseline.get(name)
-                if previous and current < previous * (1.0 - self._MAX_DROP_RATIO):
-                    problems.append(
-                        f"{name} 覆盖范围异常收缩: {previous} 条 → {current} 条"
-                        f"（-{(previous - current) / previous:.0%}）"
-                    )
-        else:
-            logger.info("无历史构建基线，本次仅做基础校验（空值与规模下限）")
+        self._log_baseline_state()
+        for name, current in counts.items():
+            previous = baseline.get(name)
+            if previous and current < previous * (1.0 - self._MAX_DROP_RATIO):
+                problems.append(
+                    f"{name} 覆盖范围异常收缩: {previous} 条 → {current} 条"
+                    f"（-{(previous - current) / previous:.0%}）"
+                )
 
         if not problems:
             logger.info("质量门禁通过: %s", ", ".join(f"{k}={v}" for k, v in counts.items()))
@@ -191,6 +189,19 @@ class QualityGateStep(PipelineStep):
             + "\n".join(f"  - {p}" for p in problems)
             + "\n本次降级的规则源:\n" + degraded_text
         )
+
+    def _log_baseline_state(self) -> None:
+        """按基线状态给出明确提示：不存在 / 口径不兼容 / 不可读 / 已加载。"""
+        status = self._baseline.status
+        if status == BuildBaseline.STATUS_LOADED:
+            logger.info("已加载历史基线（schema %d），执行规则规模变化检查", BuildBaseline.SCHEMA)
+        elif status == BuildBaseline.STATUS_INCOMPATIBLE:
+            logger.info("历史基线存在，但统计口径不兼容（%s），本次跳过规模比对",
+                        self._baseline.detail)
+        elif status == BuildBaseline.STATUS_UNREADABLE:
+            logger.warning("历史基线不可读（%s），本次仅执行基础质量检查", self._baseline.detail)
+        else:
+            logger.info("首次构建：无历史基线，仅执行基础质量检查")
 
 
 class WriteRulesStep(PipelineStep):
