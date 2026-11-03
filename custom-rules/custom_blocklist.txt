@@ -167,3 +167,6 @@
 ||aegis.qq.com^
 ||tamaegis.com^
 ||otheve.beacon.qq.com^
+
+#------- Kimi Code Desktop 遥测屏蔽 -------
+||telemetry-logs.kimi.com^
