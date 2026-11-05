@@ -71,12 +71,11 @@ i6.weather.oppomobile.com
 outlook.office.com
 
 # --- 腾讯 / 微信 / QQ ---
-# 微信长连接（即时通讯推送保障）
+
 szlong.weixin.qq.com
 channels.weixin.qq.com
-# 微信图片/素材 CDN
 wximg.wxs.qq.com
-# QQ 连接 & 登录服务
+open.weixin.qq.com
 cgi.connect.qq.com
 c.pc.qq.com
 q2.qlogo.cn
