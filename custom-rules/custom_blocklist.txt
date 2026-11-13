@@ -6,6 +6,7 @@
 #屏蔽 AdGuard 内部注入域名
 ||local.adguard.org^
 #运营商相关屏蔽
+||dm.wo.com.cn^
 ||auth.wosms.cn^
 ||config.cmpassport.com^
 ||enrichgw.10010.com^
