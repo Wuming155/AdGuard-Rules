@@ -307,3 +307,13 @@
 ||logservice1.hicloud.com^
 ||metrics.data.hihonorcloud.com^
 ||logservice.hihonorcloud.com^
+
+# claude遥测
+||api3.siftscience.com^
+||a-api.anthropic.com^
+||a-cdn.anthropic.com^
+||statsig.anthropic.com^
+||statsigapi.net^
+||datadoghq.com^
+||datadoghq.eu^
+||sentry.io^
