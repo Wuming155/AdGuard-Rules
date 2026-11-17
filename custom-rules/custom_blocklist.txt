@@ -131,7 +131,6 @@
 ||scc.bytedance.com^
 ||gdt.qq.com^
 ||ugdtimg.com^
-||trae-api-cn.mchost.guru^
 ||openapi.qoder.sh^
 ||galileotelemetry.tencent.com^
 ||tosv.byted.org^
