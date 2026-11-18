@@ -137,10 +137,6 @@ knicks.jd.com
 
 # Trae AI 编程助手
 api.trae.cn
-# Chat Z AI
-chat.z.ai
-# Sider AI 浏览器助手
-sider.ai
 
 # ============================================================
 # ☁️ 云存储、CDN 与开发者服务
@@ -206,15 +202,10 @@ dui88.com
 # 联通营业厅
 nisportal.10010.com
 
-
-# --- 开发者工具与在线服务 ---
-# Online Metrix 反欺诈
-online-metrix.net
-# 阿里云推送
-ynuf.aliapp.org
-
 # --- 其他网站与工具 ---
 # 360.cn 安全服务
 360.cn
 www.360.cn
 jiagu.360.cn
+beian.mps.gov.cn
+beian.miit.gov.cn
